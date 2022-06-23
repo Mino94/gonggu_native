@@ -1,30 +1,13 @@
 import React from 'react';
-import {
-  View,
-  Text,
-  Image,
-  ScrollView,
-  TextInput,
-  SafeAreaView,
-  StyleSheet,
-  Button,
-} from 'react-native';
-import MainNavigation from './src/screens/navigation/MainNavigation';
+import store from './src/store/store';
+import QnaNavigation from './src/screens/navigation/QnaNavigation';
 
 const App = () => {
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.container}>
-        <MainNavigation />
-      </View>
-    </SafeAreaView>
+    <Provider store={store}>
+      <QnaNavigation />
+    </Provider>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-});
 
 export default App;
