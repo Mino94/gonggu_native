@@ -2,7 +2,7 @@ import React from "react";
 import { SafeAreaView, Text, View } from "react-native"
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import LoginScreen from "../Login/LoginScreen";
-import Login from "../Login/LoginScreen";
+
 
 const Home = () => {
 	return (

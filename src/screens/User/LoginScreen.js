@@ -1,22 +1,32 @@
 import React from "react";
 import { Image, StyleSheet, Text, TextInput, TouchableHighlight, View } from "react-native"
-//import { useDispatch } from "react-redux/es/exports";
-const LoginScreen =()=>{
-    //const dispatch=useDispatch();
-    const onSubmit=()=>{
-        // dispatch(login(user));
-        console.log('wow')
-    }
 
+const LoginScreen =()=>{
+    const dispatch=useDispatch();
+    const [user, setUser] = useState({
+        id: "",
+        password: "",
+      });
+      const onChangeTextHandler = (name, value) => {
+        setUser({
+          ...user,
+          [name]: value,
+        });
+      };
+      const onSubmit = () => {
+        //dispatch(login(user));
+      };
     return (
         <View style={styles.form}>
    
             <Image source={ require('../../../assets/logo.png')} style={{ width: 180, height: 130 ,marginTop:70}}></Image>
             <Text style={styles.textLogin}>Login</Text>
             <Text style={styles.tab}>              </Text>
-            <TextInput style={styles.inputBox} placeholder="     ID" placeholderTextColor='white'/>
+            <TextInput style={styles.inputBox} placeholder="     ID" placeholderTextColor='white'//
+                        onChangeText={(value) => onChangeTextHandler("id", value)}/>
           
-            <TextInput style={styles.inputBox} placeholder="     PW" placeholderTextColor='white' />
+            <TextInput style={styles.inputBox} placeholder="     PW" placeholderTextColor='white' //
+                        onChangeText={(value) => onChangeTextHandler("password", value)} secureTextEntry={true}/>
             
             <TouchableHighlight  onPress={onSubmit}> 
                 <Text style={styles.loginButton}>LOGIN</Text>
