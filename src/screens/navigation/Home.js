@@ -1,11 +1,16 @@
 import React from "react";
-import { Text, View } from "react-native"
+import { SafeAreaView, Text, View } from "react-native"
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import LoginScreen from "../Login/LoginScreen";
+import Login from "../Login/LoginScreen";
 
 const Home = () => {
 	return (
-		<View>
-			<Text>111</Text>
-		</View>
+		<SafeAreaProvider>
+			<SafeAreaView style={{flex:1}}>
+				<LoginScreen></LoginScreen>
+			</SafeAreaView>
+		</SafeAreaProvider>
 	)
 }
 
