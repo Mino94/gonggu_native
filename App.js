@@ -1,12 +1,12 @@
 import React from 'react';
 import { View, Text, Image, ScrollView, TextInput, SafeAreaView, StyleSheet, Button } from 'react-native';
-import MainNavigation from './src/screens/navigation/MainNavigation';
+import FullNavigation from './src/screens/navigation/FullNavigation';
 
 const App = () => {
   return (
     <SafeAreaView style={styles.container}>
 		<View style={styles.container}>
-			<MainNavigation/>
+			<FullNavigation/>
 		</View>
 	</SafeAreaView>
   );
