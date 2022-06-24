@@ -1,36 +1,39 @@
-import React, {useState, useEffect} from 'react';
-import {StyleSheet, Text, TouchableOpacity} from 'react-native';
+import React, {useState, useEffect, useCallback} from 'react';
+import {
+  Alert,
+  AsyncStorage,
+  Button,
+  Modal,
+  StatusBar,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import {useDispatch} from 'react-redux';
+import {qnaCreate} from '../../store/qna/qna';
 
 const QnaListItem = ({item}) => {
-  const [selectedId, setSelectedId] = useState(null);
-
-  const backgroundColor = item.id === selectedId ? '#6ab04c' : '#D2E1C8';
-  const color = item.id === selectedId ? 'white' : 'black';
-
   return (
-    <Item
-      item={item}
-      onPress={() => setSelectedId(item.id)}
-      backgroundColor={{backgroundColor}}
-      textColor={{color}}
-    />
+    <>
+      <Text style={[styles.question]}>{item.question}</Text>
+    </>
   );
 };
 
-const Item = ({item, onPress, backgroundColor, textColor}) => (
-  <TouchableOpacity onPress={onPress} style={[styles.item, backgroundColor]}>
-    <Text style={[styles.title, textColor]}>{item.title}</Text>
-  </TouchableOpacity>
-);
-
 const styles = StyleSheet.create({
-  item: {
-    padding: 20,
-    marginVertical: 8,
-    marginHorizontal: 16,
+  question: {
+    backgroundColor: '#D2E1C8',
+    color: '#0D4212',
+    padding: 15,
+    fontSize: 15,
   },
-  title: {
-    fontSize: 10,
+  answer: {
+    backgroundColor: '#F7F4E3',
+    color: 'black',
+    padding: 15,
+    fontSize: 15,
   },
 });
 

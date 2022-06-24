@@ -1,5 +1,5 @@
-import { takeLatest, takeEvery, call, put } from "redux-saga/effects";
-import produce from "immer";
+import {takeLatest, takeEvery, call, put} from 'redux-saga/effects';
+import produce from 'immer';
 import {
   QNA_CREATE,
   QNA_CREATE_SUCCESS,
@@ -7,28 +7,28 @@ import {
   QNA_SELECT,
   QNA_SELECT_SUCCESS,
   QNA_SELECT_FAIL,
-} from "./actionType";
-import { insertQnaApi, selectQnaApi } from "./qnaAndAnswerApi";
+} from './actionType';
+import {insertQnaApi, selectQnaApi} from './qnaAndAnswerApi';
 
 //액션 함수
-export const qnaCreate = (params) => ({ type: QNA_CREATE, params });
-export const qnaSelect = () => ({ type: QNA_SELECT });
+export const qnaCreate = params => ({type: QNA_CREATE, params});
+export const qnaSelect = () => ({type: QNA_SELECT});
 
 function* insertQna(action) {
   try {
     const result = yield call(insertQnaApi, action.params);
-    yield put({ type: QNA_CREATE_SUCCESS, data: result.data }); //put : 특성 액션을 디스패치
+    yield put({type: QNA_CREATE_SUCCESS, data: result.data}); //put : 특성 액션을 디스패치
   } catch (err) {
-    yield put({ type: QNA_CREATE_FAIL, data: err.response.data });
+    yield put({type: QNA_CREATE_FAIL, data: err.response.data});
   }
 }
 
 function* selectQna() {
   try {
     const result = yield call(selectQnaApi);
-    yield put({ type: QNA_SELECT_SUCCESS, data: result.data }); //put : 특성 액션을 디스패치
+    yield put({type: QNA_SELECT_SUCCESS, data: result.data}); //put : 특성 액션을 디스패치
   } catch (err) {
-    yield put({ type: QNA_SELECT_FAIL, data: err.response.data });
+    yield put({type: QNA_SELECT_FAIL, data: err.response.data});
   }
 }
 
@@ -47,7 +47,7 @@ const initialBoard = {
 
 //reducer
 const qna = (state = initialBoard, action) =>
-  produce(state, (draft) => {
+  produce(state, draft => {
     switch (action.type) {
       case QNA_CREATE:
         draft.loading = true;
