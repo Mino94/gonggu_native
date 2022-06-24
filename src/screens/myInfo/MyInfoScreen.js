@@ -1,16 +1,41 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native"
+import { useDispatch, useSelector } from "react-redux";
+import { mypageSelect } from "../../store/mypage/mypage";
 
-const MyInfoScreen = ({navigation}) => { 
+const MyInfoScreen = ({ navigation }) => {
+    const mypage = useSelector((state) => state.mypage);
+    const dispatch = useDispatch();
+    
+    //토큰 지정
+    useEffect(() => {
+        async function get() { 
+            try {
+                await AsyncStorage.setItem('token', "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZXhwIjoxNjU2MTI4NjU0fQ.e9X4iiHmxZ2Qn-L0f26LOW08EW8VrPKnIAqpSDZqncs")
+            } catch (error) {
+                console.log("error >>> " + error)
+            }
+        }
+        get();
+        dispatch(mypageSelect())
+    }, [])
+
+    const data = mypage.myInfo
+    
+    useEffect(() => {
+        dispatch(mypageSelect())
+    }, [mypage])
+
     return (
         <View style={styles.container}>
             <Text style={styles.title}>내 정보</Text>
             <View style={styles.box1}>
                 <Image source={require("../../../assets/person.png")} resizeMode="contain" style={styles.imageStyle}></Image>
-                <Text style={{fontSize:20, marginLeft:8}}>안녕하세요, userId님 '◡'🌿</Text>
+                <Text style={{ fontSize: 18, marginLeft: 5 }}>안녕하세요, {data.userId}님 '◡'🌿</Text>
             </View>
             <View style={styles.box2}>
-                <MyInfoButton title="내 정보 수정" navigation={navigation} />
+                {/* <MyInfoButton title="마이 페이지" navigation={navigation} /> */}
+                <MyInfoButton title="내 정보 수정" data={data} navigation={navigation} />
                 <MyInfoButton title="로그아웃" />
             </View>
         </View>
@@ -19,10 +44,10 @@ const MyInfoScreen = ({navigation}) => {
 
 export default MyInfoScreen;
 
-const MyInfoButton = ({title, navigation}) => { 
+const MyInfoButton = ({ title, data, navigation }) => { 
     
     return (
-        <TouchableOpacity style={styles.btnContainer} onPress={() => navigation.push('MyInfoDetail') } >
+        <TouchableOpacity style={styles.btnContainer} onPress={() => navigation.push('MyInfoDetail', { data: data })} >
             <Text style={styles.buttonText}>{title}</Text>
         </TouchableOpacity>
 
@@ -50,7 +75,6 @@ const styles = StyleSheet.create({
         height: 70,
         flexDirection: "row",
         paddingLeft:20,
-        //justifyContent: "center",
         alignItems: "center"
     },
     box2: {
@@ -80,10 +104,7 @@ const styles = StyleSheet.create({
     },
     imageStyle: {
         width: 50,
-        height:40,
-        //backgroundColor:"purple"
+        height:40
     }
-    
-
 
 })

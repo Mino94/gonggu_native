@@ -1,27 +1,43 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Button, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-
+import { useSelector, useDispatch } from "react-redux";
+import { mypageSelect } from "../../store/mypage/mypage";
+import AsyncStorage from "@react-native-community/async-storage";
 
 const MyPageScreen = ({ navigation }) => {
-    //console.log(navigation)
+    const mypage = useSelector((state) => state.mypage);
+    const dispatch = useDispatch();
+    //console.log("mypage >>> " + JSON.stringify(mypage));
+
+    useEffect(() => {
+        async function get() { 
+            try {
+                await AsyncStorage.setItem('token', "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZXhwIjoxNjU2MTI4NjU0fQ.e9X4iiHmxZ2Qn-L0f26LOW08EW8VrPKnIAqpSDZqncs")
+            } catch (error) {
+                console.log("error >>> " + error)
+            }
+        }
+        get();
+        dispatch(mypageSelect())
+    }, [])
+
     return (
         <View style={styles.container}>
             <Text style={styles.title}>마이 페이지</Text>
             <View style={styles.rectangle}>
-                <MyPageButton title="공구 참여 현황" id="1" navigation={navigation} />
-                <MyPageButton title="나의 공구 모집" id="2" navigation={navigation} />
+                <MyPageButton title="공구 참여 현황" id="1" data={mypage.myJoinList} navigation={navigation} />
+                <MyPageButton title="나의 공구 모집" id="2" data={mypage.myPost} navigation={navigation} />
             </View>
         </View>
     )
 }
 
-const MyPageButton = ({title, id, navigation}) => { 
+const MyPageButton = ({title, id, data, navigation}) => { 
     
     const linkto = id == 1 ? "MyJoin" : "MyPost";
-    //console.log(navigation)
-    
+  
     return (
-        <TouchableOpacity style={styles.btnContainer} onPress={() => navigation.push(linkto) } >
+        <TouchableOpacity style={styles.btnContainer} onPress={() => navigation.push(linkto, {title:title, data:data}) } >
             <Text style={styles.buttonText}>{title}</Text>
         </TouchableOpacity>
 

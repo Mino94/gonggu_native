@@ -1,21 +1,27 @@
 import React, { useState } from "react"
-import { Button, Image, Modal, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native"
+import { Alert, Image, Modal, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native"
 import DropDownPicker from "react-native-dropdown-picker"
 import Postcode from '@actbase/react-daum-postcode';
+import { useDispatch } from "react-redux";
+import { updateInfo } from "../../store/mypage/mypage";
 
-const MyInfoDetailScreen = () => {
-    const [name, setName] = useState("")
-    const [postcode, setPostcode] = useState("");
-    const [addr1, setAddr1] = useState("");
-    const [addr2, setAddr2] = useState("");
-    const [addr3, setAddr3] = useState("");
-    const [tel, setTel] = useState("");
-    const [bankAccount, setBankAccount] = useState("");
+const MyInfoDetailScreen = (props) => {
+
+    const data = props.route.params.data
+    const navigation = props.navigation
+
+    const [name, setName] = useState(`${data.name}`)
+    const [postcode, setPostcode] = useState(`${data.postcode}`);
+    const [addr1, setAddr1] = useState(`${data.address1}`);
+    const [addr2, setAddr2] = useState(`${data.address2}`);
+    const [addr3, setAddr3] = useState(`${data.address3}`);
+    const [tel, setTel] = useState(`${data.tel}`);
+    const [bankAccount, setBankAccount] = useState(`${data.bankaccount}`);
     
     const [open, setOpen] = useState(false);
-    const [value, setValue] = useState(null);
+    const [value, setValue] = useState(`${data.bank}`);
     const [items, setItems] = useState([
-        { label: "NH농협", value: "NH" },
+        { label: "NH농협", value: "농협" },
         { label: "국민은행", value: "국민" },
         { label: "신한은행", value: "신한" },
         { label: "우리은행", value: "우리" },
@@ -25,48 +31,51 @@ const MyInfoDetailScreen = () => {
 
     const [isModal, setIsModal] = useState(false);
     
-
+    const dispatch = useDispatch();
     const DaumPost = () => {
         return (
             <>
                 <Modal
                     animationType="slide"
                     visible={isModal}>
+                    <TouchableOpacity
+                        style={{ marginTop: 100, marginBottom: 20, marginLeft: 40 }}
+                        onPress={() => setIsModal(false)}>
+                        <View style={styles.modalBtn}>
+                            <Text style={{ color: "#F6F4E5" }}>창 종료</Text>
+                        </View>
+                    </TouchableOpacity>
                     <Postcode
-                        style={{marginTop: 80, marginLeft:30,width: 320, height: 600 }}
+                        style={{ marginLeft: 30, width: 320, height: 600 }}
                         jsOptions={{ animation: true, hideMapBtn: true }}
                         onSelected={data => {
                             setPostcode(data.zonecode);
                             setAddr1('');
+                            setAddr2('');
                             setAddr3('');
                             
-                            if(data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
+                            if (data.userSelectedType === 'R') {
                                 setAddr1(data.roadAddress);
+                                if (data.bname !== '' && /[동|로|가]$/g.test(data.bname)) {
+                                    setAddr3(data.bname);
 
-                            // 법정동명이 있을 경우 추가한다. (법정리는 제외)
-                            // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
-                            if (data.bname !== '' && /[동|로|가]$/g.test(data.bname)) {
-                                setAddr3(data.bname);
-                                // 건물명이 있고, 공동주택일 경우 추가한다.
-
-                            if (data.buildingName !== '' && data.apartment === 'Y') {
-                                setExtraAddr((prev) => {
-                                    return prev !== '' ? `${prev}, ${data.buildingName}` : `${data.buildingName}`;
-                                });
+                                    if (data.buildingName !== '' && data.apartment === 'Y') {
+                                        setAddr3((prev) => {
+                                            return prev !== '' ? `${prev}, ${data.buildingName}` : `${data.buildingName}`;
+                                        });
+                                    }
+                                } else {
+                                    setAddr3('');
+                                }
+                            } else { 
+                                setAddr3(data.jibunAddress);
                             }
-                            } else {
-                                setExtraAddr('');
-                            }
-                            } else {
-                                // 사용자가 지번 주소를 선택했을 경우(J)
-                                setExtraAddr(data.jibunAddress);
-                            }  
                             setIsModal(false);
                         }} />
                 </Modal>
             </>
 
-                )
+        )
             
     }
     
@@ -74,13 +83,35 @@ const MyInfoDetailScreen = () => {
         setIsModal(true);
     }
 
+    const onSubmitInfo = (e) => {
+        e.preventDefault();
+        
+        dispatch(
+            updateInfo({
+                userId: data.userId,
+                name: name,
+                postcode: postcode,
+                address1: addr1,
+                address2: addr2,
+                address3: addr3,
+                tel: tel,
+                bank: value,
+                bankaccount: bankAccount
+            })
+        )
+
+        Alert.alert('수정 완료 ☺', null, [{text:"확인", onPress:()=> navigation.navigate('Home')}])
+        
+        
+    }
+
     return (
+        <ScrollView style={{backgroundColor:"white"}}>
         <View style={styles.container}>
-            {/* <ScrollView> */}
             <Text style={styles.title}>내 정보 수정</Text>
             <View style={styles.box1}>
                 <Image source={require("../../../assets/person.png")} resizeMode="contain" style={styles.imgStyle}></Image>
-                <Text style={{fontSize:20, marginLeft:8}}>안녕하세요, userId님 '◡'💚</Text>
+                <Text style={{fontSize:20, marginLeft:8}}>안녕하세요, {data.userId}님 '◡'💚</Text>
             </View>
             <View style={styles.box2}>
                 
@@ -88,7 +119,7 @@ const MyInfoDetailScreen = () => {
                 <TextInput
                     placeholder="이름"
                         value={name}
-                    onChangeText={setName} />
+                        onChangeText={setName}/>
                 </View>
                 <View style={{flexDirection:"row", justifyContent:"space-around"}}>
                     <View style={styles.listBlock1}>
@@ -132,7 +163,6 @@ const MyInfoDetailScreen = () => {
                 
                 <View style={[styles.listBlock, {marginTop:6}]}>
                     <DropDownPicker
-                        //mode="BADGE"
                         dropDownDirection="TOP"
                         dropDownContainerStyle={{ backgroundColor: "#faf9ef" }}
                         style={{borderWidth:0, backgroundColor:"transparent"}}
@@ -143,7 +173,8 @@ const MyInfoDetailScreen = () => {
                         items={items}
                         setOpen={setOpen}
                         setValue={setValue}
-                        setItems={setItems} />
+                        setItems={setItems}
+                        />
                 </View>
                 <View style={[styles.listBlock, {marginTop:6}]}>
                     <TextInput
@@ -154,11 +185,12 @@ const MyInfoDetailScreen = () => {
                  
             </View>
             <DaumPost/>
-            <TouchableOpacity style={[styles.btn2, {marginTop:20, marginLeft:0} ]}>
-                <Text style={{color:"#F6F4E5CC"}}>수정 완료</Text>
+            <TouchableOpacity style={[styles.btn2, {marginTop:20, marginLeft:0} ]} onPress={(e)=>onSubmitInfo(e)}>
+                <Text style={{color:"#F6F4E5", fontWeight:"bold"}}>수정 완료</Text>
             </TouchableOpacity>
            
-        </View>
+            </View>
+            </ScrollView>
     )
 }
 
@@ -168,7 +200,7 @@ export default MyInfoDetailScreen
 
 const styles = StyleSheet.create({
     container: {
-        paddingTop: 20,
+        paddingTop: 30,
         flex: 1,
         alignItems: "center",
         backgroundColor: "white"
@@ -176,7 +208,7 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 20,
         fontWeight: "bold",
-        paddingBottom:15
+        paddingBottom:30
     },
     box1: {
         borderColor: "#cfd8dc",
@@ -198,7 +230,8 @@ const styles = StyleSheet.create({
         borderRadius: 25,
         width: "85%",
         height: 400,
-        marginTop: 20,
+        marginTop: 30,
+        marginBottom:15,
         paddingHorizontal: 20,
         alignItems:"center",
         paddingTop: 30,
@@ -211,7 +244,8 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         paddingHorizontal: 10,
         backgroundColor: "#faf9ef",
-        marginBottom:10
+        marginBottom: 10,
+        
     },
     listBlock1: {
         borderRadius: 40,
@@ -242,6 +276,13 @@ const styles = StyleSheet.create({
         backgroundColor: "#1E4119CC",
         marginBottom: 10,
         marginLeft:18
+    },
+    modalBtn: {
+        backgroundColor: "#1E4119",
+        width: "18%",
+        height: 20,
+        alignItems: "center",
+        justifyContent: "center"
     }
 
 })

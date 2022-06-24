@@ -1,44 +1,29 @@
 import { FlatList, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
+import { useDispatch, useSelector } from "react-redux";
+import AsyncStorage from "@react-native-community/async-storage";
+import { mypageSelect } from "../../store/mypage/mypage";
 
-const MyPageDetailScreen = (data) => {
-    //console.log(data.props.title)
-    const [post, setPost] = useState([
-        { id: 1, title: "짱구 좋아요", done: "진행중" },
-        { id: 2, title: "흰둥이 좋아요", done: "마감" },
-        { id: 3, title: "유리 좋아요", done: "진행중" },
-        { id: 4, title: "짱구 좋아요", done: "진행중" },
-        { id: 5, title: "흰둥이 좋아요", done: "false" },
-        { id: 6, title: "유리 좋아요", done: "true" },
-        { id: 7, title: "짱구 좋아요", done: "진행중" },
-        { id: 8, title: "흰둥이 좋아요", done: "마감" },
-        { id: 9, title: "유리 좋아요", done: "진행중" },
-        { id: 10, title: "짱구 좋아요", done: "진행중" },
-        { id: 11, title: "흰둥이 좋아요", done: "false" },
-        { id: 12, title: "유리 좋아요", done: "true" },
-        { id: 13, title: "짱구 좋아요", done: "진행중" },
-        { id: 14, title: "흰둥이 좋아요", done: "마감" },
-        { id: 15, title: "유리 좋아요", done: "진행중" },
-        { id: 16, title: "짱구 좋아요", done: "진행중" },
-        { id: 17, title: "흰둥이 좋아요", done: "false" },
-        { id: 18, title: "유리 좋아요", done: "true" },
-    ]) 
-
+const MyPageDetailScreen = ({route}) => {
+    //console.log("data >>>" + JSON.stringify(route.params.data))
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>{data.props.title}</Text>
+            <Text style={styles.title}>{route.params.title}</Text>
             <View style={styles.postBlock}>
             
                 <FlatList ListHeaderComponent={
                     <View style={styles.listTitleBlock}>
-                        <View style={{ flexDirection: "row", justifyContent:"space-around"}}>
-                            <Text style={{fontWeight:"600"}}>목차</Text>
-                            <Text style={{fontWeight:"600"}}>제목</Text>
-                            <Text style={{fontWeight:"600"}}>진행 상황</Text>
+                        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+                            <Text style={{ fontWeight: "600" }}>목차</Text>
+                            <Text style={{ fontWeight: "600" }}>제목</Text>
+                            <Text style={{ fontWeight: "600" }}>진행 상황</Text>
                         </View>
                     </View>
                 }
-                    data={post} renderItem={renderItem} keyExtractor={(item) => String(item.id)} />
+                    data={route.params.data}
+                    renderItem={renderItem}
+                    keyExtractor={(item) => item.id} 
+                     />
                
             </View>
 		</View>
@@ -47,20 +32,48 @@ const MyPageDetailScreen = (data) => {
 
 export default MyPageDetailScreen;
 
-const renderItem = ({ item }) => {
-    //console.log(item);
+
+const renderItem = ( {item,index} ) => {
+    //console.log("item >>>" + JSON.stringify(item));
+    const makeZeroNumber = (number) => {
+        if (Number(number) < 10) {
+            return "0" + number;
+        }
+        return number;
+    };
+    
+    const compareDate = (endDate, cCount, mCount) => {
+        let now = new Date();
+        let ingState = false;
+        let nowDate =
+            now.getFullYear() +
+            "-" +
+            makeZeroNumber(now.getMonth() + 1) +
+            "-" +
+            makeZeroNumber(now.getDate());
+
+        if (nowDate <= endDate && cCount < mCount) {
+            ingState = true;
+        }
+        return ingState;
+    };
+
     return (
         <View style={styles.listBlock}>
             <TouchableOpacity>
-                <View style={{flexDirection:"row", justifyContent:"space-around"}}>
+                <View style={{flexDirection:"row", justifyContent:"space-between"}}>
                     <View>
-                        <Text>{item.id}</Text>
+                        <Text style={{fontWeight:"bold"}}>{index+1}</Text>
                     </View>
                     <View>
                         <Text>{item.title}</Text>
                     </View>
                     <View>
-                        <Text>{item.done}</Text>
+                        {compareDate(item.endDate, item.currentCount, item.maxCount) ?
+                            (<Text style={{ color: "#6495ED", fontWeight: "bold" }}>진행중</Text>)
+                            :
+                            (<Text style={{ color: "#DC143C", fontWeight: "bold" }}>마감</Text>)}
+                        {/* <Text>{item.done}</Text> */}
                     </View>
                 </View>
             </TouchableOpacity>
