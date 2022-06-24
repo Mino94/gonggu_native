@@ -1,21 +1,10 @@
-import { combineReducers } from "redux";
-import { all } from "redux-saga/effects";
+import {applyMiddleware, createStore} from 'redux';
+import createSagaMiddleware from 'redux-saga';
+import rootReducer, {rootSaga} from './saga';
 
-import login, { LoginSaga } from "./login/login";
+const sagaMiddleware = createSagaMiddleware(); // 사가미들웨어 객체 생성
+const store = createStore(rootReducer, applyMiddleware(sagaMiddleware)); // 스토어 객체 생성
 
+sagaMiddleware.run(rootSaga); // 사가 미들웨어로 루트사가를 실행한다.
 
-// 여러 상태값을 변경하는 리듀서들을 하나의 리듀서 함수로 합친다.
-const rootReducer = combineReducers({
-  login,
-
-});
-
-// 여러 사가함수들을 연결해 주어 사가 함수가 액션을 인식할 수 있게 해준다.
-export function* rootSaga() {
-  yield all([
-    
-    LoginSaga(),
-   
-  ]); // all : 함수 내부 배열에 등록 된 사가 함수들을 리덕스 사가 미들웨어에 등록, 등록된 함수가 동시에 실행될 수 있게 처리
-}
-export default rootReducer;
+export default store;

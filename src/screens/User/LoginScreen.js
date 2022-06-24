@@ -1,10 +1,16 @@
-import React from "react";
-import { Image, StyleSheet, Text, TextInput, TouchableHighlight, View } from "react-native"
+import React, { useEffect,useState } from "react";
+import { Image, StyleSheet, Text, TextInput, TouchableHighlight, View } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
 
+import { select } from "../../store/login/login";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useNavigation } from "@react-navigation/native";
 const LoginScreen =()=>{
     const dispatch=useDispatch();
+    
+    const loginRedux = useSelector((state) => state.login);
     const [user, setUser] = useState({
-        id: "",
+        userId: "",
         password: "",
       });
       const onChangeTextHandler = (name, value) => {
@@ -12,18 +18,38 @@ const LoginScreen =()=>{
           ...user,
           [name]: value,
         });
+        
       };
+      const navigation = useNavigation();
+
+      useEffect(() => {
+        console.log(loginRedux);
+    
+        if (loginRedux.isLoggedIn) {
+            AsyncStorage.setItem("id", loginRedux.data.id + "");
+            AsyncStorage.setItem("token", loginRedux.data.token);
+            
+            console.log("로그인 성공");
+            
+            //navigation.navigate("/");
+        }
+        
+      }, [loginRedux]);
+    
       const onSubmit = () => {
-        //dispatch(login(user));
+        
+        dispatch(select({ userId: user.userId, password: user.password }));
       };
+
     return (
+        
         <View style={styles.form}>
    
             <Image source={ require('../../../assets/logo.png')} style={{ width: 180, height: 130 ,marginTop:70}}></Image>
             <Text style={styles.textLogin}>Login</Text>
             <Text style={styles.tab}>              </Text>
             <TextInput style={styles.inputBox} placeholder="     ID" placeholderTextColor='white'//
-                        onChangeText={(value) => onChangeTextHandler("id", value)}/>
+                        onChangeText={(value) => onChangeTextHandler("userId", value)}/>
           
             <TextInput style={styles.inputBox} placeholder="     PW" placeholderTextColor='white' //
                         onChangeText={(value) => onChangeTextHandler("password", value)} secureTextEntry={true}/>
@@ -37,6 +63,7 @@ const LoginScreen =()=>{
                 <Text style={styles.joinButton}>JOIN</Text>
             </TouchableHighlight> 
         </View>
+        
     )
 }
 
@@ -48,7 +75,6 @@ const styles=StyleSheet.create({
         jusifyContent:'center',
         alignItems:'center',
         backgroundColor:'#8a9a7f',
-        
     },
     tab:{
         fontSize:8,

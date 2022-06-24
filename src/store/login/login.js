@@ -1,15 +1,8 @@
 
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
 import { takeLatest, call, put } from "redux-saga/effects";
 import produce from "immer";
-import {
-  LOGIN_REQUEST,
-  LOGIN_SUCCESS,
-  LOGIN_FAIL,
-  SIGN_UP_REQUEST,
-  SIGN_UP_SUCCESS,
-  SIGN_UP_FAIL,
-} from "./actionType";
+import {LOGIN_REQUEST,LOGIN_SUCCESS,LOGIN_FAIL,SIGN_UP_REQUEST,SIGN_UP_SUCCESS,SIGN_UP_FAIL,} from "./actionType";
 import { customAxios } from "../../http/CustomAxios";
 
 //create ({id: "aaa", pw: "1234"})
@@ -17,11 +10,10 @@ export const create = (params) => ({ type: SIGN_UP_REQUEST, params });
 export const select = (params) => ({ type: LOGIN_REQUEST, params });
 
 function signUpApi(params) {
-  console.log("넘어온 데이터api", params);
   return axios.post(
     "http://192.168.0.21:8080/user/join",
 
-    params, // {params : {id: "aaa", pw: "1234"}}
+    params // {params : {id: "aaa", pw: "1234"}}
   );
 }
 
@@ -36,17 +28,21 @@ function* signUpUser(action) {
 }
 
 function loginApi(params) {
-  return customAxios.post(
+  console.log("api ok");
+  return axios.post(
     "http://192.168.0.21:8080/user/login",
-    params, //  {id: "aaa", pw: "1234"}
+    params //  {id: "aaa", pw: "1234"}
   );
+  
 }
 
 function* loginUser(action) {
+  
   try {
-    const result = yield call(loginApi, action.params);
-	console.log("this>>>")
-	console.log(result);
+    
+    const result = yield call(loginApi, action.params)
+
+    console.log("result ", result);
     yield put({
       type: LOGIN_SUCCESS,
       data: result.data,
@@ -61,6 +57,7 @@ function* loginUser(action) {
 
 //사가함수
 export function* LoginSaga() {
+  console.log("here saga");
   yield takeLatest(LOGIN_REQUEST, loginUser);
   yield takeLatest(SIGN_UP_REQUEST, signUpUser);
 }
@@ -80,7 +77,7 @@ const initialLogin = {
     bank: "",
     bankaccount: "",
   },
-  isLoggedIn: AsyncStorage.getItem("token") ? true : false, // 로그인 여부
+  isLoggedIn: false,//AsyncStorage.getItem("token") ? true : false, // 로그인 여부
   isLoggingOut: false, // 로그아웃 시도중
   isLoggingIn: false, // 로그인 시도중
   logInErrorReason: "", // 로그인 실패 사유
@@ -91,7 +88,9 @@ const initialLogin = {
 
 //reducer
 const login = (state = initialLogin, action) =>
+
   produce(state, (draft) => {
+    
     switch (action.type) {
       case SIGN_UP_REQUEST:
         draft.isSignedUp = false;
@@ -137,5 +136,6 @@ const login = (state = initialLogin, action) =>
         return state;
     }
   });
+
 
 export default login;

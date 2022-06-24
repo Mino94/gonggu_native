@@ -1,6 +1,5 @@
 ## ios $ android
 ios/
-Podfile*
 android/
 
 # OSX
