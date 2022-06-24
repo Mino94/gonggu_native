@@ -27,6 +27,7 @@ const QnaList = () => {
     boardId: 1,
     questionId: 1,
     question: '',
+    answer: '',
   });
   const [visible, setVisible] = useState(true);
 
@@ -41,8 +42,7 @@ const QnaList = () => {
     setVisible(!visible);
   };
 
-  const handleCreateSubmit = async e => {
-    setLoad();
+  const handleQnaCreateSubmit = async e => {
     await dispatch(qnaCreate(question));
     Keyboard.dismiss();
     setLoad(question);
@@ -51,6 +51,12 @@ const QnaList = () => {
 
   const onChangeHandler = async (key, value) => {
     await setQuestion({...question, [key]: value});
+  };
+
+  const handleAnswerCreateSubmit = e => {
+    dispatch(answerCreate({id: boardId, answer: value}));
+    setVisible(!visible);
+    setValue('');
   };
 
   return (
@@ -72,6 +78,27 @@ const QnaList = () => {
                   </TouchableOpacity>
                 </View>
               </View>
+              {visible ? (
+                <View></View>
+              ) : (
+                <View style={styles.inputRow}>
+                  <View>
+                    <TextInput
+                      style={styles.input}
+                      onChangeText={value => onChangeHandler('answer', value)}
+                      placeholder="답변 작성"
+                      placeholderTextColor="white"
+                    />
+                  </View>
+                  <View>
+                    <TouchableOpacity
+                      onPress={handleAnswerCreateSubmit}
+                      style={styles.button}>
+                      <Text>등록</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              )}
             </>
           )}
           keyExtractor={item => item.id}
@@ -88,7 +115,9 @@ const QnaList = () => {
           />
         </View>
         <View>
-          <TouchableOpacity onPress={handleCreateSubmit} style={styles.button}>
+          <TouchableOpacity
+            onPress={handleQnaCreateSubmit}
+            style={styles.button}>
             <Text>등록</Text>
           </TouchableOpacity>
         </View>
