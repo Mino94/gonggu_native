@@ -63,7 +63,7 @@ const CategoryList = ({ categoryIndex, setCategoryIndex, setText}) => {
 	const handleOnClick = (categoryId, title) => {
 		dispatch(boardSelect({ categoryId: categoryId, title: "" }));
 		setText('')
-		console.log("title >>>>>>>>>>>>>>>>>>>>>>>" + title);
+		
 	};
 	
 	return (
