@@ -128,7 +128,7 @@ const mypage = (state = initialBoard, action) =>
         draft.success = true;
         break;
       case MYPAGE_POST_FAIL:
-        draft.loading = false;r
+        draft.loading = false;
         break;
       case MYPAGE_PWCHECK:
         //console.log("action>>>>>>" + action);

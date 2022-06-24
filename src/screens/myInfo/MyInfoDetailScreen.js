@@ -274,7 +274,7 @@ const styles = StyleSheet.create({
         alignItems:"center",
         paddingHorizontal: 10,
         backgroundColor: "#1E4119CC",
-        marginBottom: 10,
+        marginBottom: 40, ///android에서 틈 작아서 수정
         marginLeft:18
     },
     modalBtn: {

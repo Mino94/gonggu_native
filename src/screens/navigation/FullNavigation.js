@@ -17,6 +17,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import MyPageDetailScreen from '../myPage/MyPageDetailScreen';
 import MyInfoScreen from '../myInfo/MyInfoScreen';
 import MyInfoDetailScreen from '../myInfo/MyInfoDetailScreen';
+import Home from '../board/Home';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -31,7 +32,8 @@ const FullNavigation = () => {
 					backgroundColor: "#1E4119"
 				},
 				headerTitle: (props)=> <LogoTitle {...props} />,
-				headerTintColor: "#F6F4E5"
+				headerTintColor: "#F6F4E5",
+				headerTitleAlign:"center"
 			}}>
 				<Stack.Screen
 					name="home"
@@ -64,9 +66,9 @@ export default FullNavigation
 
 function LogoTitle() {
 	return (
-		<TouchableOpacity onPress={()=>navigation.navigate('Home')}>
+		// <TouchableOpacity onPress={()=>navigation.navigate('Home')}>
 			<Image source={require('../../../assets/logo.png')} style={styles.logoImage} resizeMode="contain" />
-		</TouchableOpacity>
+		// </TouchableOpacity>
 	)
 }
 
@@ -75,7 +77,7 @@ const BottomTabScreen = () => {
 	return (
 		<>
 		<Tab.Navigator initialRouteName="Home" screenOptions={{headerShown:false, tabBarActiveTintColor: "#0D4212", tabBarShowLabel:false, tabBarStyle:{shadowOpacity:0.2}}}>
-			<Tab.Screen name="Home" component={Board} options={{tabBarIcon: ({color, size}) => (<Icon name="home" color={color} size={size} />) }} />
+			<Tab.Screen name="Home" component={Home} options={{tabBarIcon: ({color, size}) => (<Icon name="home" color={color} size={size} />) }} />
 			<Tab.Screen name="Mypage" component={MyPageScreen} options={{ tabBarIcon: ({ color, size }) => (<Icon name="format-list-numbered" color={color} size={size} />) }} /> 
 			{/* <Tab.Screen name="Left" component={NavigateBefore} options={{ tabBarVisible: false, tabBarIcon: ({ color, size }) => (<Icon name='navigate-before' color={color} size={size} />) }} /> */}
 			{/* <Tab.Screen name="Right" component={NavigateNext} options={{ tabBarIcon: ({color, size}) => (<Icon name="navigate-next" color={color} size={size} />) }} />  */}
