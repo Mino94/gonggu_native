@@ -38,12 +38,8 @@ const QnaList = () => {
     dispatch(qnaSelect());
   }, [load]);
 
-  const handleSubmit = () => {
-    setVisible(!visible);
-  };
-
-  const handleQnaCreateSubmit = async e => {
-    await dispatch(qnaCreate(question));
+  const handleQnaCreateSubmit = e => {
+    dispatch(qnaCreate(question));
     Keyboard.dismiss();
     setLoad(question);
     alert('댓글 작성이 완료되었습니다.');
@@ -53,11 +49,11 @@ const QnaList = () => {
     await setQuestion({...question, [key]: value});
   };
 
-  const handleAnswerCreateSubmit = e => {
-    dispatch(answerCreate({id: boardId, answer: value}));
-    setVisible(!visible);
-    setValue('');
-  };
+  // const handleAnswerCreateSubmit = e => {
+  //   dispatch(answerCreate({id: boardId, answer: value}));
+  //   setVisible(!visible);
+  //   setValue('');
+  // };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -72,31 +68,19 @@ const QnaList = () => {
                 </View>
                 <View>
                   <TouchableOpacity
-                    onPress={handleSubmit}
+                    onPress={() => {
+                      setVisible(!visible);
+                    }}
                     style={styles.button}>
-                    <Text>답글</Text>
+                    <Text>{visible ? "답변" : "취소"}</Text>
                   </TouchableOpacity>
                 </View>
               </View>
               {visible ? (
-                <View></View>
-              ) : (
-                <View style={styles.inputRow}>
-                  <View>
-                    <TextInput
-                      style={styles.input}
-                      onChangeText={value => onChangeHandler('answer', value)}
-                      placeholder="답변 작성"
-                      placeholderTextColor="white"
-                    />
-                  </View>
-                  <View>
-                    <TouchableOpacity
-                      onPress={handleAnswerCreateSubmit}
-                      style={styles.button}>
-                      <Text>등록</Text>
-                    </TouchableOpacity>
-                  </View>
+                <View><QnaListItem item={item} /></View>
+              ) : (    
+                <View>
+                  <Text>{item.answer}</Text>
                 </View>
               )}
             </>
@@ -104,7 +88,6 @@ const QnaList = () => {
           keyExtractor={item => item.id}
         />
       </ScrollView>
-
       <View style={styles.inputRow}>
         <View>
           <TextInput
