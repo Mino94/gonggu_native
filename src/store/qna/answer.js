@@ -1,6 +1,5 @@
-import { takeLatest, takeEvery, call, put } from "redux-saga/effects";
-import { deleteAnswerApi, insertAnswerApi } from "./qnaAndAnswerApi";
-import produce from "immer";
+import {takeLatest, takeEvery, call, put} from 'redux-saga/effects';
+import produce from 'immer';
 import {
   ANSWER_CREATE,
   ANSWER_CREATE_SUCCESS,
@@ -8,29 +7,32 @@ import {
   ANSWER_DELETE,
   ANSWER_DELETE_SUCCESS,
   ANSWER_DELETE_FAIL,
-} from "./actionType";
+} from './actionType';
+import {deleteAnswerApi, insertAnswerApi} from './qnaAndAnswerApi';
 
 //액션 함수
-export const answerCreate = (params) => ({ type: ANSWER_CREATE, params });
-export const answerDelete = (params) => ({ type: ANSWER_DELETE, params });
+export const answerCreate = params => ({type: ANSWER_CREATE, params});
+export const answerDelete = params => ({type: ANSWER_DELETE, params});
 
 function* insertAnswer(action) {
+  console.log('============', action);
   try {
     const result = yield call(insertAnswerApi, action.params);
-    yield put({ type: ANSWER_CREATE_SUCCESS, data: result.data }); //put : 특성 액션을 디스패치
+    console.log(result);
+    yield put({type: ANSWER_CREATE_SUCCESS, data: result.data}); //put : 특성 액션을 디스패치
   } catch (err) {
-    yield put({ type: ANSWER_CREATE_FAIL, data: err.response.data });
+    yield put({type: ANSWER_CREATE_FAIL, data: err.response.data});
   }
 }
 
 function* deleteAnswer(action) {
-  console.log("action", action);
+  console.log('action', action);
   try {
     const result = yield call(deleteAnswerApi, action.params);
 
-    yield put({ type: ANSWER_DELETE_SUCCESS, data: result.data }); //put : 특성 액션을 디스패치
+    yield put({type: ANSWER_DELETE_SUCCESS, data: result.data}); //put : 특성 액션을 디스패치
   } catch (err) {
-    yield put({ type: ANSWER_DELETE_FAIL, data: err.response.data });
+    yield put({type: ANSWER_DELETE_FAIL, data: err.response.data});
   }
 }
 
@@ -49,7 +51,7 @@ const initialBoard = {
 
 //reducer
 const answer = (state = initialBoard, action) =>
-  produce(state, (draft) => {
+  produce(state, draft => {
     switch (action.type) {
       case ANSWER_CREATE:
         draft.loading = true;
