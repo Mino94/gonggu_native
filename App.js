@@ -1,7 +1,7 @@
 import React from 'react';
 import { Provider } from "react-redux";
 import store from './src/store/store';
-import { View, Text, Image, ScrollView, TextInput, SafeAreaView, StyleSheet, Button } from 'react-native';
+import { View, Text, Image, ScrollView, TextInput, SafeAreaView, StyleSheet, Button, AsyncStorage } from 'react-native';
 import FullNavigation from './src/screens/navigation/FullNavigation';
 
 const App = () => {

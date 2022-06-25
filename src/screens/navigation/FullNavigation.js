@@ -7,6 +7,7 @@ import Home from './Home';
 import { Image } from 'react-native';
 import Test from './Test';
 import Write from '../board/Write';
+import JoinList from '../board/JoinList';
 
 
 const Stack = createNativeStackNavigator();
@@ -26,17 +27,18 @@ const StackHomekNavigation = () => {
 			<Stack.Screen
 				name="Home"
 				component={Home}
-				options={{ headerShown: false }}
 			/>
 			<Stack.Screen
 				name="Detail"
 				component={Detail}
-				options={{ headerShown: false }}
 			/>
 			<Stack.Screen
 				name="Write"
 				component={Write}
-				options={{ headerShown: false }}
+			/>
+			<Stack.Screen
+				name="JoinList"
+				component={JoinList}
 			/>
 		</Stack.Navigator>
 	);

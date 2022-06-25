@@ -1,11 +1,11 @@
-import React from "react";
+import React, { useRef } from "react";
 import { KeyboardAvoidingView, ScrollView, StyleSheet, Text, View } from "react-native"
 import { actions, RichEditor, RichToolbar } from "react-native-pell-rich-editor";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 
-const RichText = () => {
-	const richText = React.useRef();
+const RichText = ({ datas, setDatas }) => {
+	const richText = useRef();
 	return (
 		<SafeAreaView>
             <ScrollView>
@@ -21,10 +21,11 @@ const RichText = () => {
 						style={styles.richTextEditor}
                         ref={richText}
                         onChange={ descriptionText => {
-                            console.log("descriptionText:", descriptionText);
+                            setDatas({...datas, content: descriptionText});
                         }}
 						useContainer={false}
 						containerStyle={{ minHeight: 200 }}
+						initialContentHTML={datas.content}
                     />
                 </KeyboardAvoidingView>
             </ScrollView>
