@@ -40,7 +40,6 @@ const datas = [
 ]
 
 const renderItem = ({item}) => {
-	console.log(item)
 	return(
 		<View style={styles.line}>
 			<Text style={styles.name}>{item.name}</Text>
@@ -56,8 +55,6 @@ const JoinList = ({ navigation, route }) => {
 	const participation = useSelector(state => state.participation);
 	const dispatch = useDispatch();
 	const boardId = route.params.id;
-
-	console.log(Object.values(participation));
 
 	useEffect(() => {
 		dispatch(joinList(boardId));
