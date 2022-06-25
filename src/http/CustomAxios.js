@@ -1,12 +1,12 @@
 import axios from "axios";
 import AsyncStorage from "@react-native-community/async-storage";
 
-axios.defaults.baseURL = 'http://localhost:8080';
+axios.defaults.baseURL = 'http://192.168.0.8:8080';
 
 export const storeToken = async () => {
 	try {
-		await AsyncStorage.setItem('token', 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI1IiwiZXhwIjoxNjU2MjE1MzYyfQ.OP2s-r3wfO38a-Etn4sQldXzlvL1kolg2sp31_gFv1g');
-		await AsyncStorage.setItem('id', '5');
+		await AsyncStorage.setItem('token', 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyIiwiZXhwIjoxNjU2MjM0NjA3fQ.hFBdOcftRj7fMjQTvVnl7DbQF50TIYfxd3eBvDGoakU');
+		await AsyncStorage.setItem('id', '3');
 	} catch(err) {
 		console.log(err);
 	}

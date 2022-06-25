@@ -7,7 +7,7 @@ const Home = ({navigation}) => {
 		<View>
 			<Button
 				title="Detail 열기"
-				onPress={() => navigation.navigate('Detail', { id: 129 })}
+				onPress={() => navigation.navigate('Detail', { id: 133 })}
 			/>
 			<Button
 				title="Write 열기"
