@@ -22,7 +22,7 @@ export const checkPw = (params) => ({ type: MYPAGE_PWCHECK, params });
 export const changeCurrent = () => ({ type: MYPAGE_PWCHECK_CHANGE });
 export const updateInfo = (params) => ({
   type: MYPAGE_UPDATE_MYINFO,
-  params,
+  params
 });
 
 export const update_changeCurrent = () => ({
@@ -46,6 +46,7 @@ function updateMyInfoApi(params) {
 function* myPage() {
   try {
     const result = yield call(mypageApi); //일단 .data 제외
+    console.log("result +++++>>>>>", result)
     yield put({ type: MYPAGE_POST_SUCCESS, data: result }); //put : 특성 액션을 디스패치
   } catch (err) {
     yield put({ type: MYPAGE_POST_FAIL, data: err });
@@ -81,9 +82,9 @@ function* checkMyPw(action) {
 
 function* updateMyInfo(action) {
   try {
-    //console.log("action.params" + JSON.stringify(action));
+    console.log("action.params" + JSON.stringify(action));
     const result = yield call(updateMyInfoApi, action.params);
-    //console.log("result >>> " + JSON.stringify(result));
+    console.log("saga에선? >>> " + JSON.stringify(result));
     yield put({ type: MYPAGE_UPDATE_SUCCESS, data: result });
   } catch (error) {
     console.log(error);
@@ -121,6 +122,8 @@ const mypage = (state = initialBoard, action) =>
         draft.loading = true;
         break;
       case MYPAGE_POST_SUCCESS:
+        console.log("aaaaaaaaaaa")
+        console.log(action);
         draft.myInfo = action.data.MyInfo;
         draft.myJoinList = action.data.MyJoinList;
         draft.myPost = action.data.MyPost;

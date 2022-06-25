@@ -4,8 +4,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { mypageSelect } from "../../store/mypage/mypage";
 
 const MyInfoScreen = ({ navigation }) => {
-    const mypage = useSelector((state) => state.mypage);
-    const dispatch = useDispatch();
     
     //토큰 지정
     useEffect(() => {
@@ -19,12 +17,15 @@ const MyInfoScreen = ({ navigation }) => {
         get();
         dispatch(mypageSelect())
     }, [])
-
-    const data = mypage.myInfo
+    const mypage = useSelector((state) => state.mypage);
+    const dispatch = useDispatch();
     
-    useEffect(() => {
-        dispatch(mypageSelect())
-    }, [mypage])
+    console.log("info에서 mypage 불러오기 >>>> ", mypage)
+    const data = mypage.myInfo
+  
+    // useEffect(() => {
+    //     dispatch(mypageSelect())
+    // }, [data.update])
 
     return (
         <View style={styles.container}>
@@ -35,7 +36,7 @@ const MyInfoScreen = ({ navigation }) => {
             </View>
             <View style={styles.box2}>
                 {/* <MyInfoButton title="마이 페이지" navigation={navigation} /> */}
-                <MyInfoButton title="내 정보 수정" data={data} navigation={navigation} />
+                <MyInfoButton title="내 정보 수정" navigation={navigation} />
                 <MyInfoButton title="로그아웃" />
             </View>
         </View>
@@ -47,7 +48,7 @@ export default MyInfoScreen;
 const MyInfoButton = ({ title, data, navigation }) => { 
     
     return (
-        <TouchableOpacity style={styles.btnContainer} onPress={() => navigation.push('MyInfoDetail', { data: data })} >
+        <TouchableOpacity style={styles.btnContainer} onPress={() => navigation.navigate('MyInfoDetail', { data: data })} >
             <Text style={styles.buttonText}>{title}</Text>
         </TouchableOpacity>
 

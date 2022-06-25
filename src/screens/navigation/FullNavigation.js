@@ -9,8 +9,8 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import { BackHandler, Image, Platform, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import Board from "../board/Board";
+
+
 import MyPageScreen from '../myPage/MyPageScreen';
 import Notification from '../notification/Notification';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -65,6 +65,7 @@ const FullNavigation = () => {
 export default FullNavigation
 
 function LogoTitle() {
+	// const navigation = useNavigation();
 	return (
 		// <TouchableOpacity onPress={()=>navigation.navigate('Home')}>
 			<Image source={require('../../../assets/logo.png')} style={styles.logoImage} resizeMode="contain" />
@@ -89,6 +90,9 @@ const BottomTabScreen = () => {
 	)
 
 }
+
+
+
 
 // const NavigateBefore = (props) => {
 // 	// console.log(props)

@@ -1,14 +1,42 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { Alert, Image, Modal, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native"
 import DropDownPicker from "react-native-dropdown-picker"
 import Postcode from '@actbase/react-daum-postcode';
 import { useDispatch } from "react-redux";
-import { updateInfo } from "../../store/mypage/mypage";
+import { updateInfo, mypageSelect } from "../../store/mypage/mypage";
+import { useSelector } from "react-redux";
+import AsyncStorage from "@react-native-community/async-storage";
+import { delay } from "redux-saga/effects";
 
 const MyInfoDetailScreen = (props) => {
 
-    const data = props.route.params.data
+    const mypage = useSelector((state) => state.mypage);
+    const dispatch = useDispatch();
+   
+    console.log("infodetail에서 mypage 불러오기 >>>> ", mypage.myInfo)
+    
+    //토큰 지정
+    useEffect(() => {
+        async function get() { 
+            try {
+                await AsyncStorage.setItem('token', "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZXhwIjoxNjU2MTI4NjU0fQ.e9X4iiHmxZ2Qn-L0f26LOW08EW8VrPKnIAqpSDZqncs")
+            } catch (error) {
+                console.log("error >>> " + error)
+            }
+        }
+        get();
+        console.log('!!!!!!!!!!!!!!!!!!!!!!before : ' + mypage.myInfo.name)
+        dispatch(mypageSelect())
+        
+        console.log('!!!!!!!!!!!!!!!!!!!!!!after : ' + mypage.myInfo.name)
+
+    }, [])
+
+    const data = mypage.myInfo
+    // const data = props.route.params.data
     const navigation = props.navigation
+    // console.log(navigation)
+    //console.log(navigation)
 
     const [name, setName] = useState(`${data.name}`)
     const [postcode, setPostcode] = useState(`${data.postcode}`);
@@ -31,7 +59,7 @@ const MyInfoDetailScreen = (props) => {
 
     const [isModal, setIsModal] = useState(false);
     
-    const dispatch = useDispatch();
+   
     const DaumPost = () => {
         return (
             <>
@@ -83,9 +111,9 @@ const MyInfoDetailScreen = (props) => {
         setIsModal(true);
     }
 
-    const onSubmitInfo = (e) => {
-        e.preventDefault();
-        
+    const onSubmitInfo = () => {
+       
+        //console.log("여기서 어떻게 들어감? >>> " + name)
         dispatch(
             updateInfo({
                 userId: data.userId,
@@ -99,12 +127,12 @@ const MyInfoDetailScreen = (props) => {
                 bankaccount: bankAccount
             })
         )
-
-        Alert.alert('수정 완료 ☺', null, [{text:"확인", onPress:()=> navigation.navigate('Home')}])
-        
+        //dispatch(mypageSelect()); //reset({routes: [{name:"MyInfo"}]})
+        Alert.alert('수정 완료 ☺', null, [{text:"확인", onPress:()=> navigation.pop()}])    
         
     }
-
+   
+            
     return (
         <ScrollView style={{backgroundColor:"white"}}>
         <View style={styles.container}>
@@ -185,7 +213,7 @@ const MyInfoDetailScreen = (props) => {
                  
             </View>
             <DaumPost/>
-            <TouchableOpacity style={[styles.btn2, {marginTop:20, marginLeft:0} ]} onPress={(e)=>onSubmitInfo(e)}>
+            <TouchableOpacity style={[styles.btn2, {marginTop:20, marginLeft:0} ]} onPress={onSubmitInfo}>
                 <Text style={{color:"#F6F4E5", fontWeight:"bold"}}>수정 완료</Text>
             </TouchableOpacity>
            
