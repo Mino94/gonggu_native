@@ -1,28 +1,22 @@
 import axios from 'axios';
 import { call, put } from 'redux-saga/effects';
 import { READ_FAIL, CREATE_SUCCESS, CREATE_FAIL, UPDATE_VALUE, READ_SUCCESS, UPDATE_SUCCESS, UPDATE_FAIL, DELETE_SUCCESS, DELETE_FAIL } from './actionType';
-import { customAxios } from "../customAxios";
 import { CustomAxios, CustomFileAxios, storeToken } from '../../http/CustomAxios';
 
 //게시글 등록
 
 const postBoardApi = (params) => {
-	return axios.post(
-		"http://localhost:8080/board",
-		params,
-		{
-			headers: {
-				'Content-Type': 'multipart/form-data',
-				'Authorization': `Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyIiwiZXhwIjoxNjU2MTI1MzQyfQ.rVZ2g1atYWWtHHuBs_JHJyh9_AketyvpwBZU1gFbIt4`,
-			}
-		}
+	return CustomFileAxios(
+		"/board",
+		"post",
+		params
 	)
 }
 
 export const postBoard = function* (action) {
 	try {
 		const result = yield call(postBoardApi, action.params);
-		yield put({ type: CREATE_SUCCESS, data: result.data }); //put : 특성 액션을 디스패치
+		yield put({ type: CREATE_SUCCESS, data: result }); //put : 특성 액션을 디스패치
 	} catch (err) {
 		yield put({ type: CREATE_FAIL, data: err.response.data });
 	}

@@ -43,7 +43,7 @@ const Detail = ( {navigation, route} ) => {
 		const today = new Date();
 		const endDate = new Date(board.data.endDate);
 		const gap = today.getTime() - endDate.getTime();
-		setDDay(Math.ceil(gap / (1000*60*60*24)));
+		setDDay(Math.floor(gap / (1000*60*60*24)));
 	}, [board])
 
 	useEffect(() => {
@@ -93,7 +93,7 @@ const Detail = ( {navigation, route} ) => {
 					</View>
 					: null}
 					<View style={styles.info1}>
-						<Text style={styles.dDay}>D{dDay > 0 ? '+' + dDay : dDay}</Text>
+						<Text style={styles.dDay}>D{dDay > 0 ? '+' + dDay : dDay == 0 ? '-' + dDay : dDay}</Text>
 					</View>
 					<View>
 						<Text style={styles.title}><Text>{board.data.title}</Text></Text>

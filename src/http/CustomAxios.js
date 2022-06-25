@@ -5,8 +5,8 @@ axios.defaults.baseURL = 'http://localhost:8080';
 
 export const storeToken = async () => {
 	try {
-		await AsyncStorage.setItem('token', 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyIiwiZXhwIjoxNjU2MTI1MzQyfQ.rVZ2g1atYWWtHHuBs_JHJyh9_AketyvpwBZU1gFbIt4');
-		await AsyncStorage.setItem('id', '2');
+		await AsyncStorage.setItem('token', 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI1IiwiZXhwIjoxNjU2MjE1MzYyfQ.OP2s-r3wfO38a-Etn4sQldXzlvL1kolg2sp31_gFv1g');
+		await AsyncStorage.setItem('id', '5');
 	} catch(err) {
 		console.log(err);
 	}
@@ -41,7 +41,6 @@ export const CustomAxios = async (url, method, data) => {
             Authorization: `Bearer ${token}`
         },
     });
-	const id = await getId();
 	return response.data;
 }
 
