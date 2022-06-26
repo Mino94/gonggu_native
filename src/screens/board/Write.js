@@ -7,6 +7,7 @@ import { launchImageLibrary  } from "react-native-image-picker";
 import { useDispatch, useSelector } from "react-redux";
 import board, { create, init, updateData } from "../../store/board/board";
 import { oneButtonAlert } from "./Alert";
+import { boardSelect } from "../../store/board/mainboard";
 
 const Write = ({ navigation, route }) => {
 
@@ -18,10 +19,13 @@ const Write = ({ navigation, route }) => {
 
 	const [open, setOpen] = useState(false); //카테고리 visible, unvisible
 
-	const [category, setCategory] = useState([ //카테고리 리스트
-		{label: "apple", value: 1},
-		{label: "banana", value: 2}
-	]);
+	const categoryList = useSelector(state => state.category);
+	let tempCategory = [];
+	categoryList.data.map((item) => {
+		tempCategory.push({label: item.name, value: item.id})
+	})
+
+	const [category, setCategory] = useState(tempCategory);
 
 	const [isDatePickerVisible, setIsDatePickerVisible] = useState(false); //datepicker visible, unvisible
 
@@ -120,6 +124,7 @@ const Write = ({ navigation, route }) => {
 			dispatch(init());
 		}
 		if(storeBoard.success && !storeBoard.loading) {
+			dispatch(boardSelect({ title: "" }));
 			Alert();
 		}
 	}, [storeBoard]);
@@ -190,7 +195,7 @@ const styles = StyleSheet.create({
 	board: {
 		flex: 1,
 		padding: 10,
-		backgroundColor: "#fff"
+		backgroundColor: "#fff",
 	},
 	inputText: {
 		height: 50,

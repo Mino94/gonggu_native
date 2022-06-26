@@ -24,7 +24,7 @@ const RichText = ({ datas, setDatas }) => {
                             setDatas({...datas, content: descriptionText});
                         }}
 						useContainer={false}
-						containerStyle={{ minHeight: 200 }}
+						containerStyle={{ minHeight: 150 }}
 						initialContentHTML={datas.content}
                     />
                 </KeyboardAvoidingView>

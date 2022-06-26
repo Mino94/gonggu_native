@@ -16,9 +16,26 @@ const Home = ({ navigation }) => {
 
 	const [ categoryIndex, setCategoryIndex ] = React.useState(0);
 	const [text, setText] = useState();
+
 	useEffect(() => {
 		dispatch(boardSelect({ title: "" }));
 	}, []);
+
+	useEffect(() => {
+		console.log("???????")
+	}, [dispatch]);
+
+	const onPressMoveWriteHandler = () => {
+		navigation.navigate("Write");
+	}
+
+	const onEndReached = () => {
+		if(mainboard.loading) {
+			return;
+		} else {
+			dispatch(boardSelect({ title: "" }));
+		}
+	}
 
 	return (
 		<View style={styles.bgcolor}>
@@ -33,6 +50,7 @@ const Home = ({ navigation }) => {
 				setText={setText}
 				/>
 			<FlatList
+				style={{flex:1, marginTop: 20}}
 				columnWrapperStyle={{justifyContent: 'space-around'}}
 				showsVerticalScrollIndicator={false}
 				contentContainerStyle={{
@@ -44,7 +62,12 @@ const Home = ({ navigation }) => {
 				data={mainboard.data}
 				renderItem={({ item }) => <Card item={item} navigation={navigation}/>}
 				keyExtractor={(item) => item.id}
+				// onEndReachedThreshold={0.8}
+				// onEndReached={onEndReached}
 			/>
+			<TouchableOpacity style={styles.button} onPress={onPressMoveWriteHandler}>
+				<Text style={styles.text}>+</Text>
+			</TouchableOpacity>
 		</View>
 	);
 };
@@ -177,6 +200,7 @@ const Card = ({ item, navigation }) => {
 
 const styles = StyleSheet.create({
 	bgcolor: {
+		flex:1,
 		backgroundColor: 'white'
 	},
 	container: {
@@ -256,6 +280,22 @@ const styles = StyleSheet.create({
 	price: {
 		marginTop: 15
 	},
+	button: {
+		position: 'absolute',
+		bottom: 10,
+		right: 10,
+        backgroundColor: '#1E4119',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: 70,
+        height: 70,
+        borderRadius: 35,
+    },
 
+    text: {
+        fontSize: 30,
+        textAlign: 'center',
+        color: 'white'
+    }
 
 })

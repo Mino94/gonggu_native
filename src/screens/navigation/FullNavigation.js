@@ -80,11 +80,11 @@ const FullNavigation = () => {
 export default FullNavigation
 
 function LogoTitle() {
-	// const navigation = useNavigation();
+	const navigation = useNavigation();
 	return (
-		// <TouchableOpacity onPress={()=>navigation.navigate('Home')}>
+		<TouchableOpacity onPress={()=>navigation.navigate('Home')}>
 			<Image source={require('../../../assets/logo.png')} style={styles.logoImage} resizeMode="contain" />
-		// </TouchableOpacity>
+		</TouchableOpacity>
 	)
 }
 
