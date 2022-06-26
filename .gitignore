@@ -1,6 +1,10 @@
 ## ios $ android
 ios/
+Podfile*
 android/
+
+package.json
+package-lock.json
 
 # OSX
 #
