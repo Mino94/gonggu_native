@@ -21,6 +21,8 @@ import Home from '../board/Home';
 import Write from '../board/Write';
 import Detail from '../board/Detail';
 import JoinList from '../board/JoinList';
+import LoginScreen from '../User/LoginScreen';
+import RegisterScreen from '../User/RegisterScreen';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -38,6 +40,14 @@ const FullNavigation = () => {
 				headerTintColor: "#F6F4E5",
 				headerTitleAlign:"center"
 			}}>
+				<Stack.Screen
+					name="Login"
+					component={LoginScreen}
+				/>
+				<Stack.Screen
+					name="Join"
+					component={RegisterScreen}
+				/>
 				<Stack.Screen
 					name="home"
 					component={BottomTabScreen}
@@ -70,7 +80,6 @@ const FullNavigation = () => {
 					name="JoinList"
 					component={JoinList}
 				/>
-
 			</Stack.Navigator>
 		</NavigationContainer>
 
