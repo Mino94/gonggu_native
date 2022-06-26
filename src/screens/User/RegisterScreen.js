@@ -3,16 +3,22 @@ import { Image, Modal, ScrollView, StyleSheet, Text, TextInput, TouchableHighlig
 import { useDispatch, useSelector } from "react-redux";
 import DropDownPicker from 'react-native-dropdown-picker';
 import { useNavigate } from "react-router-dom";
-import { create } from "../../store/login/login";
+import { checkUserId, create, init } from "../../store/login/login";
 import Postcode from '@actbase/react-daum-postcode';
 import { withSafeAreaInsets } from "react-native-safe-area-context";
+import { CustomAxios } from "../../http/CustomAxios";
 const RegisterScreen =({ navigation })=>{
     const dispatch = useDispatch();
   const join = useSelector((state) => state.login);
 
   const onChangeHandler =(name, value) => {
+
     setUser({ ...user, [name]: value });
   };
+
+  const onPressMoveToLogin = () => {
+	navigation.navigate("Login");
+  }
 
   const [user, setUser] = useState({
     userId: "",
@@ -40,7 +46,7 @@ const RegisterScreen =({ navigation })=>{
   ])
 
   const onChangeHandlerPw = (name, value) => {
-    console.log(value, user.password);
+
     if (value == user.password) {
       setIsPwSame(true);
       //setUser({ ...user, [name]: value });
@@ -62,12 +68,40 @@ const RegisterScreen =({ navigation })=>{
 
   useEffect(() => {
     if(join.isSignedUp) {
+		dispatch(init());
 		navigation.navigate("Login");
 	}
   }, [join]);
 
+  const [enableJoin, setEnableJoin] = useState(false);
+  const onCheckUserId=()=>{
+	CustomAxios(
+		`user/checkId/${user.userId}`,
+		"get"
+	).then((result) => {
+		if(!result) {
+			alert("중복된 아이디 입니다.");
+			setEnableJoin(result);
+		}else {
+			alert("사용할 수 있는 아이디 입니다.");
+			setEnableJoin(result);
+		}
+	})
+  }
+
   const onSubmitJoin = (e) => {
     e.preventDefault();
+
+	if(!enableJoin) {
+		alert("아이디 중복 검사를 다시하세요.");
+		return;
+	}
+
+	if(user.userId==""||user.password==""||isZoneCode==""||isAddress==""||isAddress1==""|| user.tel==""||value==""||user.bankaccount=="")
+    {
+      alert("정보를 기입해주세요");
+    }
+    else{
     dispatch(
       create({
         userId: user.userId,
@@ -82,6 +116,8 @@ const RegisterScreen =({ navigation })=>{
         bankaccount: user.bankaccount,
       }),
     );
+	alert("회원가입됐습니다");
+	}
   };
 
   const postCodeStyle = {
@@ -100,9 +136,14 @@ const RegisterScreen =({ navigation })=>{
             <Image source={ require('../../../assets/logo.png')} style={{ width: 180, height: 130 ,marginTop:70}}></Image>
             <Text style={styles.textLogin}>Register</Text>
             <Text style={styles.tab}>              </Text>
-            <TextInput style={styles.inputBox} onChangeText={(value) => onChangeHandler("userId", value)} placeholder="ID" placeholderTextColor='white'/>
-            <TextInput style={styles.inputBox} onChangeText={(value) => onChangeHandler("password", value)} placeholder="PW" placeholderTextColor='white' />
-            <TextInput style={styles.inputBox} onChangeText={(value) => onChangeHandlerPw("passwordconfirm", value)} placeholder="PW check" placeholderTextColor='white'/>
+            <View  style={{flexDirection:"row"}}>
+			<TextInput style={styles.addBtn} onChangeText={(value) => onChangeHandler("userId", value)} placeholder="ID" placeholderTextColor='white'/>
+            <TouchableHighlight  onPress={onCheckUserId}>
+                    <Text style={{backgroundColor: '#d6d9c6',color:'#34532d',padding:13,textAlign:'center',fontSize: 17,width: 155,height:45,borderRadius: 30,flexDirection:"row", justifyContent:"center", marginLeft:10  }} >ID 중복 확인</Text>
+                </TouchableHighlight>
+			</View>
+			<TextInput style={styles.inputBox} secureTextEntry={true} onChangeText={(value) => onChangeHandler("password", value)} placeholder="PW" placeholderTextColor='white' />
+            <TextInput style={styles.inputBox} secureTextEntry={true} onChangeText={(value) => onChangeHandlerPw("passwordconfirm", value)} placeholder="PW check" placeholderTextColor='white'/>
             {isPwSame ? (
                 <View>
                   <Text style={{marginBottom:10,fontSize: 10,marginLeft: 185,color: "#1E4119",}}>
@@ -157,7 +198,7 @@ const RegisterScreen =({ navigation })=>{
                                     setIsAddress1('');
                                   }
                               } else {
-                                  setIsAddress1(data.jibunAddress);
+                                  setIsAddress(data.jibunAddress);
                               }
                               setIsPostOpen(false);
                           }} />
@@ -201,18 +242,11 @@ const RegisterScreen =({ navigation })=>{
             <TextInput style={styles.inputBox}
             onChangeText={(value) => onChangeHandler("bankaccount", value)} placeholder="Account" placeholderTextColor='white' />
 
-
-
-
-                {/* <TextInput style={{backgroundColor:'#b1b9ac', marginBottom:10,width: 115,height:45,borderRadius: 30,color:'#d6d9c6',marginLeft:10,}} //
-                           onChangeText={(value) => onChangeHandler("bank", value)} placeholder="     Bank" placeholderTextColor='white'/> */}
-
-            {/* </View> */}
             <TouchableHighlight  onPress={onSubmitJoin}>
                 <Text style={styles.loginButton}>REGISTER</Text>
             </TouchableHighlight>
             <Text style={styles.tab}>              </Text>
-            <TouchableHighlight  onPress={<a href="/Login"/>}>
+            <TouchableHighlight  onPress={onPressMoveToLogin}>
                 <Text style={styles.joinButton}>LOGIN</Text>
             </TouchableHighlight>
         </View>

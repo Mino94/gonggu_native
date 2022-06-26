@@ -22,7 +22,7 @@ const LoginScreen =({ navigation })=>{
       };
 
       useEffect(() => {
-        console.log(loginRedux);
+
 
         if (loginRedux.isLoggedIn) {
             // AsyncStorage.setItem("id", loginRedux.data.id + "");
@@ -49,10 +49,10 @@ const LoginScreen =({ navigation })=>{
             <Image source={ require('../../../assets/logo.png')} style={{ width: 180, height: 130 ,marginTop:70}}></Image>
             <Text style={styles.textLogin}>Login</Text>
             <Text style={styles.tab}>              </Text>
-            <TextInput style={styles.inputBox} placeholder="     ID" placeholderTextColor='white'//
+            <TextInput style={styles.inputBox} placeholder="ID" placeholderTextColor='white'//
                         onChangeText={(value) => onChangeTextHandler("userId", value)}/>
 
-            <TextInput style={styles.inputBox} placeholder="     PW" placeholderTextColor='white' //
+            <TextInput style={styles.inputBox} placeholder="PW" placeholderTextColor='white' //
                         onChangeText={(value) => onChangeTextHandler("password", value)} secureTextEntry={true}/>
 
             <TouchableHighlight  onPress={onSubmit}>
@@ -91,12 +91,14 @@ const styles=StyleSheet.create({
         marginRight:210,
     },
     inputBox:{
+		color:'white',
+		paddingLeft:20,
         backgroundColor:'#b1b9ac',
         marginBottom:10,
         width: 320,
         height:50,
         borderRadius: 30,
-        color:'#d6d9c6',
+
 
     },
     loginButton:{

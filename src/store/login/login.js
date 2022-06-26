@@ -2,11 +2,12 @@
 import axios from "axios";
 import { takeLatest, call, put } from "redux-saga/effects";
 import produce from "immer";
-import {LOGIN_REQUEST,LOGIN_SUCCESS,LOGIN_FAIL,SIGN_UP_REQUEST,SIGN_UP_SUCCESS,SIGN_UP_FAIL,INIT} from "./actionType";
+import {LOGIN_REQUEST,LOGIN_SUCCESS,LOGIN_FAIL,SIGN_UP_REQUEST,SIGN_UP_SUCCESS,SIGN_UP_FAIL,INIT,ID_CHECK_FAIL,ID_CHECK_SUCCESS,ID_CHECK_REQUEST} from "./actionType";
 import { CustomAxios, getToken, storeToken } from "../../http/CustomAxios";
 import messaging from '@react-native-firebase/messaging';
 
 //create ({id: "aaa", pw: "1234"})
+//export const checkUserId= (params) => ({ type: ID_CHECK_REQUEST, params });
 export const create = (params) => ({ type: SIGN_UP_REQUEST, params });
 export const select = (params) => ({ type: LOGIN_REQUEST, params });
 export const init = () => ({ type: INIT });
@@ -18,6 +19,24 @@ function signUpApi(params) {
     params // {params : {id: "aaa", pw: "1234"}}
   );
 }
+
+function checkSignUpApi(params) {
+	return CustomAxios(
+	  `user/checkId/${params}`,
+	  "get"
+	);
+  }
+
+function* checkSignUp(action) {
+	try {
+	  const result = yield call(checkSignUpApi, action.params);
+
+	  yield put({ type: ID_CHECK_REQUEST,data: result }); //put : 특성 액션을 디스패치
+	} catch (err) {
+	  yield put({ type: ID_CHECK_FAIL,data:  err.response.data });
+	}
+  }
+
 
 function* signUpUser(action) {
   try {
@@ -75,6 +94,7 @@ function* loginUser(action) {
 export function* LoginSaga() {
   console.log("here saga");
   yield takeLatest(LOGIN_REQUEST, loginUser);
+  yield takeLatest(ID_CHECK_REQUEST, checkSignUp);
   yield takeLatest(SIGN_UP_REQUEST, signUpUser);
 }
 
@@ -100,12 +120,14 @@ const initialLogin = {
   isSignedUp: false, // 회원가입 성공
   isSigningUp: false, // 회원가입 시도중
   signUpErrorReason: "", // 회원가입 실패 사유
+  isCheckedId: false, // 회원가입 성공
+  isCheckingId: false, // 회원가입 시도중
 };
 
 //reducer
 const login = (state = initialLogin, action) =>
-
   produce(state, (draft) => {
+	console.log("action>>>>",action);
 
     switch (action.type) {
 	  case INIT:
@@ -139,6 +161,12 @@ const login = (state = initialLogin, action) =>
         draft.isSignedUp = false;
         draft.signUpErrorReason = "error";
         break;
+	case LOGIN_FAIL:
+		draft.isLoggingIn = false;
+		draft.isLoggedIn = false;
+		draft.logInErrorReason = "error";
+		alert("아이디 또는 비밀번호를 확인해주세요");
+		break;
       case LOGIN_REQUEST:
         draft.isLoggingIn = true;
         draft.logInErrorReason = "";
@@ -151,11 +179,28 @@ const login = (state = initialLogin, action) =>
         draft.data.token = action.data.token;
         //isLoading=false;
         break;
-      case LOGIN_FAIL:
-        draft.isLoggingIn = false;
-        draft.isLoggedIn = false;
-        draft.logInErrorReason = "error";
+      case ID_CHECK_FAIL:
+        draft.isCheckedId = false;
+        draft.isCheckingId = false;
+
+
         break;
+	case ID_CHECK_REQUEST:
+		draft.isCheckingId = true;
+
+		break;
+	case ID_CHECK_SUCCESS:
+		draft.isCheckedId=true;
+		draft.isCheckingId=false;
+		if (action.data==true)
+		{
+			alert("사용 가능한 아이디입니다");
+		}
+		else{
+			alert("중복된 아이디입니다");
+		}
+		break;
+
       default:
         return state;
     }
