@@ -12,10 +12,10 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {useDispatch} from 'react-redux';
-import {answerCreate, qnaCreate} from '../../store/qna/qna';
+import {useDispatch, useSelector} from 'react-redux';
+import {answerCreate, qnaSelect} from '../../store/qna/qna';
 
-const QnaListItem = ({item}) => {
+const QnaListItem = ({item, setLoad}) => {
   const [answer, setAnswer] = useState({
     id: item.id,
     answer: '',
@@ -23,14 +23,15 @@ const QnaListItem = ({item}) => {
 
   const dispatch = useDispatch();
 
-  const onChangeHandler = async (key, value) => {
+  const onChangeAnswerHandler = async (key, value) => {
     await setAnswer({...answer, [key]: value});
   };
 
-  const handleSubmit = e => {
+  const handleAnswerSubmit = e => {
     dispatch(answerCreate(answer));
     alert('답글 작성 완료');
     Keyboard.dismiss();
+    setLoad(answer);
   };
 
   return (
@@ -39,13 +40,12 @@ const QnaListItem = ({item}) => {
         <View>
           <TextInput
             style={styles.input}
-            onChangeText={value => onChangeHandler('answer', value)}
-            placeholder="질문 작성"
+            onChangeText={value => onChangeAnswerHandler('answer', value)}
             placeholderTextColor="white"
           />
         </View>
         <View>
-          <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+          <TouchableOpacity style={styles.button} onPress={handleAnswerSubmit}>
             <Text>등록</Text>
           </TouchableOpacity>
         </View>
@@ -58,22 +58,31 @@ const styles = StyleSheet.create({
   input: {
     margin: 15,
     height: 40,
-    width: 300,
-    borderColor: '#7a42f4',
+    width: 250,
+    borderColor: '#d6d9c6',
     borderWidth: 1,
+    borderRadius: 20,
+    color: 'black',
   },
   inputRow: {
-    borderWidth: 2,
-    borderColor: 'black',
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-around',
   },
-  answer: {
-    backgroundColor: '#F7F4E3',
-    color: 'black',
+
+  item: {
+    backgroundColor: '#D2E1C8',
+    color: '#0D4212',
     padding: 15,
     fontSize: 15,
+    marginVertical: 8,
+    marginHorizontal: 16,
+    margin: 15,
+  },
+  button: {
+    paddingHorizontal: 8,
+    paddingVertical: 6,
+    borderRadius: 10,
+    backgroundColor: 'beige',
   },
 });
 

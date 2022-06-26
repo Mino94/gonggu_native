@@ -10,7 +10,7 @@ export const selectQnaApi = () => {
 };
 export const insertAnswerApi = params => {
   console.log('insertAnswerApi params', params);
-  return CustomAxios('/qna/answer', 'put', params);
+  return axios.put('http://192.168.219.101:8080/qna/answer', params);
 };
 
 export const deleteAnswerApi = params => {

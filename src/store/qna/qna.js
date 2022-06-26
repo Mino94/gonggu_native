@@ -31,7 +31,10 @@ export const answerDelete = params => ({type: ANSWER_DELETE, params});
 
 function* insertAnswer(action) {
   try {
+    console.log('action', action);
+
     const result = yield call(insertAnswerApi, action.params);
+
     yield put({type: ANSWER_CREATE_SUCCESS, data: result.data}); //put : 특성 액션을 디스패치
   } catch (err) {
     yield put({type: ANSWER_CREATE_FAIL, data: err.response.data});
@@ -71,7 +74,6 @@ function* selectQna() {
 export function* QnaSaga() {
   yield takeLatest(QNA_CREATE, insertQna);
   yield takeLatest(QNA_SELECT, selectQna);
-
   yield takeLatest(ANSWER_CREATE, insertAnswer);
   yield takeLatest(ANSWER_DELETE, deleteAnswer);
 }
@@ -91,7 +93,8 @@ const qna = (state = initialBoard, action) =>
         draft.loading = true;
         break;
       case ANSWER_CREATE_SUCCESS:
-        draft.data = action;
+        console.log(action);
+        draft.data = action.data;
         draft.loading = false;
         draft.success = true;
         break;
@@ -113,6 +116,7 @@ const qna = (state = initialBoard, action) =>
         draft.loading = true;
         break;
       case QNA_CREATE_SUCCESS:
+        console.log(action);
         draft.data = action;
         draft.loading = false;
         draft.success = true;

@@ -22,14 +22,13 @@ const QnaList = () => {
   const qna = useSelector(state => state.qna);
   const [load, setLoad] = useState('');
   const [selectedId, setSelectedId] = useState(null);
+  const [visible, setVisible] = useState(true);
 
   const [question, setQuestion] = useState({
     boardId: 1,
     questionId: 1,
     question: '',
-    answer: '',
   });
-  const [visible, setVisible] = useState(true);
 
   const dispatch = useDispatch();
   const isFocused = useIsFocused();
@@ -49,15 +48,9 @@ const QnaList = () => {
     await setQuestion({...question, [key]: value});
   };
 
-  // const handleAnswerCreateSubmit = e => {
-  //   dispatch(answerCreate({id: boardId, answer: value}));
-  //   setVisible(!visible);
-  //   setValue('');
-  // };
-
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView style={{borderWidth: 2, borderColor: 'black'}}>
+      <ScrollView>
         <FlatList
           data={qna.data}
           renderItem={({item}) => (
@@ -75,13 +68,13 @@ const QnaList = () => {
                 </View>
               </View>
               {item.id === selectedId ? (
-                item.answer === null ? (
+                item.answer !== null ? (
                   <View>
-                    <Text>{item.answer}</Text>
+                    <Text style={[styles.answer]}>{item.answer}</Text>
                   </View>
                 ) : (
                   <View>
-                    <QnaListItem item={item} />
+                    <QnaListItem item={item} setLoad={setLoad} />
                   </View>
                 )
               ) : null}
@@ -95,7 +88,6 @@ const QnaList = () => {
           <TextInput
             style={styles.input}
             onChangeText={value => onChangeHandler('question', value)}
-            placeholder="질문 작성"
             placeholderTextColor="white"
           />
         </View>
@@ -119,34 +111,40 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 10,
   },
+  answer: {
+    backgroundColor: '#d6d9c6',
+    color: 'black',
+    padding: 15,
+    margin: 10,
+    margin: 10,
+    alignItems: 'center',
+  },
   input: {
     margin: 15,
     height: 40,
-    width: 300,
-    borderColor: '#7a42f4',
+    width: 250,
+    borderColor: '#d6d9c6',
     borderWidth: 1,
+    borderRadius: 20,
+    color: 'white',
   },
   inputRow: {
-    borderWidth: 2,
-    borderColor: 'black',
+    backgroundColor: '#34532d',
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-around',
   },
   row: {
-    borderWidth: 2,
     margin: 10,
     backgroundColor: '#D2E1C8',
     color: '#0D4212',
     padding: 15,
     fontSize: 15,
-    borderColor: 'black',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
   },
   item: {
-    backgroundColor: '#D2E1C8',
+    backgroundColor: '#8a9a7f',
     color: '#0D4212',
     padding: 15,
     fontSize: 15,
@@ -155,12 +153,10 @@ const styles = StyleSheet.create({
     margin: 15,
   },
   button: {
-    borderWidth: 1,
-    borderColor: 'black',
     paddingHorizontal: 8,
     paddingVertical: 6,
     borderRadius: 10,
-    backgroundColor: '#F0F0F0',
+    backgroundColor: 'beige',
   },
 });
 
