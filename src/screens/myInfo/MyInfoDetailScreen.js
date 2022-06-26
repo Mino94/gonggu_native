@@ -10,30 +10,29 @@ import { delay } from "redux-saga/effects";
 
 const MyInfoDetailScreen = (props) => {
 
-    const mypage = useSelector((state) => state.mypage);
     const dispatch = useDispatch();
-   
-    console.log("infodetail에서 mypage 불러오기 >>>> ", mypage.myInfo)
+  
+    //console.log("infodetail에서 mypage 불러오기 >>>> ", mypage)
     
     //토큰 지정
-    useEffect(() => {
-        async function get() { 
-            try {
-                await AsyncStorage.setItem('token', "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZXhwIjoxNjU2MTI4NjU0fQ.e9X4iiHmxZ2Qn-L0f26LOW08EW8VrPKnIAqpSDZqncs")
-            } catch (error) {
-                console.log("error >>> " + error)
-            }
-        }
-        get();
-        console.log('!!!!!!!!!!!!!!!!!!!!!!before : ' + mypage.myInfo.name)
-        dispatch(mypageSelect())
+    // useEffect(() => {
+    //     async function get() { 
+    //         try {
+    //             await AsyncStorage.setItem('token', "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZXhwIjoxNjU2MjAxODA4fQ.cvggmPuzdNdFRPCVSiA1AhYPdEziwfzptSUm5zCuE9g")
+    //         } catch (error) {
+    //             console.log("error >>> " + error)
+    //         }
+    //     }
+    //     get();
+    //     console.log('!!!!!!!!!!!!!!!!!!!!!!before : ' + mypage.myInfo.name)
+    //     dispatch(mypageSelect())
         
-        console.log('!!!!!!!!!!!!!!!!!!!!!!after : ' + mypage.myInfo.name)
+    //     console.log('!!!!!!!!!!!!!!!!!!!!!!after : ' + mypage.myInfo.name)
 
-    }, [])
+    // }, [])
 
-    const data = mypage.myInfo
-    // const data = props.route.params.data
+    //const data= mypage.data
+    const data = props.route.params.data
     const navigation = props.navigation
     // console.log(navigation)
     //console.log(navigation)
@@ -127,6 +126,8 @@ const MyInfoDetailScreen = (props) => {
                 bankaccount: bankAccount
             })
         )
+        
+        console.log("update된 data" + JSON.stringify(data))
         //dispatch(mypageSelect()); //reset({routes: [{name:"MyInfo"}]})
         Alert.alert('수정 완료 ☺', null, [{text:"확인", onPress:()=> navigation.pop()}])    
         

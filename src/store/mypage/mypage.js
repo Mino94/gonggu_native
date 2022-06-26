@@ -85,7 +85,7 @@ function* updateMyInfo(action) {
     console.log("action.params" + JSON.stringify(action));
     const result = yield call(updateMyInfoApi, action.params);
     console.log("saga에선? >>> " + JSON.stringify(result));
-    yield put({ type: MYPAGE_UPDATE_SUCCESS, data: result });
+    yield put({ type: MYPAGE_UPDATE_SUCCESS, data: result, newdata:action.params });
   } catch (error) {
     console.log(error);
   }
@@ -108,7 +108,7 @@ const initialBoard = {
   myInfo: {},
   myJoinList: [],
   myPost: [],
-  data: [], //이번에 추가
+  data: {}, //이번에 추가
   update: [],
   loading: false,
   success: false,
@@ -122,9 +122,8 @@ const mypage = (state = initialBoard, action) =>
         draft.loading = true;
         break;
       case MYPAGE_POST_SUCCESS:
-        console.log("aaaaaaaaaaa")
-        console.log(action);
         draft.myInfo = action.data.MyInfo;
+        draft.data = action.data.MyInfo;
         draft.myJoinList = action.data.MyJoinList;
         draft.myPost = action.data.MyPost;
         draft.loading = false;
@@ -150,7 +149,8 @@ const mypage = (state = initialBoard, action) =>
         draft.data = null;
         break;
       case MYPAGE_UPDATE_SUCCESS:
-        //console.log("action >>> " + action);
+        console.log("action >>> " + JSON.stringify(action));
+        draft.data = action.newdata;
         draft.update = true;
         draft.loading = false;
         draft.success = true;

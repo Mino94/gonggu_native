@@ -9,7 +9,7 @@ const MyInfoScreen = ({ navigation }) => {
     useEffect(() => {
         async function get() { 
             try {
-                await AsyncStorage.setItem('token', "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZXhwIjoxNjU2MTI4NjU0fQ.e9X4iiHmxZ2Qn-L0f26LOW08EW8VrPKnIAqpSDZqncs")
+                await AsyncStorage.setItem('token', "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZXhwIjoxNjU2MjYwNDExfQ.G_NZAZiU0Gh4qrlhyD2V2q8rg6N5aawhYr_dlNnlBZk")
             } catch (error) {
                 console.log("error >>> " + error)
             }
@@ -21,7 +21,8 @@ const MyInfoScreen = ({ navigation }) => {
     const dispatch = useDispatch();
     
     console.log("info에서 mypage 불러오기 >>>> ", mypage)
-    const data = mypage.myInfo
+    const data = mypage.data
+    
   
     // useEffect(() => {
     //     dispatch(mypageSelect())
@@ -36,7 +37,7 @@ const MyInfoScreen = ({ navigation }) => {
             </View>
             <View style={styles.box2}>
                 {/* <MyInfoButton title="마이 페이지" navigation={navigation} /> */}
-                <MyInfoButton title="내 정보 수정" navigation={navigation} />
+                <MyInfoButton title="내 정보 수정" data={data} navigation={navigation} />
                 <MyInfoButton title="로그아웃" />
             </View>
         </View>
