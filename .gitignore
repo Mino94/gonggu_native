@@ -3,6 +3,9 @@ ios/
 Podfile*
 android/
 
+package.json
+package-lock.json
+
 # OSX
 #
 .DS_Store
