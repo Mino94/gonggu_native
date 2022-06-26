@@ -16,13 +16,13 @@ import {
   View,
 } from 'react-native';
 import {qnaCreate, qnaSelect} from '../../store/qna/qna';
-import {answerSelect} from '../../store/qna/answer';
 import {useIsFocused} from '@react-navigation/native';
-import {set} from 'immer/dist/internal';
 
 const QnaList = () => {
   const qna = useSelector(state => state.qna);
   const [load, setLoad] = useState('');
+  const [selectedId, setSelectedId] = useState(null);
+
   const [question, setQuestion] = useState({
     boardId: 1,
     questionId: 1,
@@ -41,8 +41,8 @@ const QnaList = () => {
   const handleQnaCreateSubmit = e => {
     dispatch(qnaCreate(question));
     Keyboard.dismiss();
-    setLoad(question);
     alert('댓글 작성이 완료되었습니다.');
+    setLoad(question);
   };
 
   const onChangeHandler = async (key, value) => {
@@ -68,21 +68,23 @@ const QnaList = () => {
                 </View>
                 <View>
                   <TouchableOpacity
-                    onPress={() => {
-                      setVisible(!visible);
-                    }}
+                    onPress={() => setSelectedId(item.id)}
                     style={styles.button}>
-                    <Text>{visible ? "답변" : "취소"}</Text>
+                    <Text>{visible ? '답변' : '취소'}</Text>
                   </TouchableOpacity>
                 </View>
               </View>
-              {visible ? (
-                <View><QnaListItem item={item} /></View>
-              ) : (    
-                <View>
-                  <Text>{item.answer}</Text>
-                </View>
-              )}
+              {item.id === selectedId ? (
+                item.answer === null ? (
+                  <View>
+                    <Text>{item.answer}</Text>
+                  </View>
+                ) : (
+                  <View>
+                    <QnaListItem item={item} />
+                  </View>
+                )
+              ) : null}
             </>
           )}
           keyExtractor={item => item.id}

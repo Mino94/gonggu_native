@@ -2,11 +2,11 @@ import {CustomAxios} from '../../http/CustomAxios';
 import axios from 'axios';
 export const insertQnaApi = params => {
   console.log('insertQnaApi', params);
-  return axios.post('http://192.168.0.21:8080/qna', params);
+  return axios.post('http://192.168.219.101:8080/qna', params);
 };
 
 export const selectQnaApi = () => {
-  return axios.get('http://192.168.0.21:8080/qna');
+  return axios.get('http://192.168.219.101:8080/qna');
 };
 export const insertAnswerApi = params => {
   console.log('insertAnswerApi params', params);

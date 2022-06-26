@@ -3,6 +3,7 @@ import {
   Alert,
   AsyncStorage,
   Button,
+  Keyboard,
   Modal,
   StatusBar,
   StyleSheet,
@@ -12,23 +13,25 @@ import {
   View,
 } from 'react-native';
 import {useDispatch} from 'react-redux';
-import {qnaCreate} from '../../store/qna/qna';
+import {answerCreate, qnaCreate} from '../../store/qna/qna';
 
 const QnaListItem = ({item}) => {
-  const [value, setValue] = useState("");
-  const [visible, setVisible] = useState(false);
+  const [answer, setAnswer] = useState({
+    id: item.id,
+    answer: '',
+  });
 
   const dispatch = useDispatch();
 
-  const onChange = useCallback((e) => {
-    setValue(e.target.value);
-  }, []);
+  const onChangeHandler = async (key, value) => {
+    await setAnswer({...answer, [key]: value});
+  };
 
-  // const handleSubmit = (e) => {
-  //   dispatch(answerCreate({ id: item.id, answer: value }));
-  //   setVisible(!visible);
-  //   setValue("");
-  // };
+  const handleSubmit = e => {
+    dispatch(answerCreate(answer));
+    alert('답글 작성 완료');
+    Keyboard.dismiss();
+  };
 
   return (
     <>
@@ -36,14 +39,13 @@ const QnaListItem = ({item}) => {
         <View>
           <TextInput
             style={styles.input}
-            onChangeText={value => onChangeHandler('question', value)}
+            onChangeText={value => onChangeHandler('answer', value)}
             placeholder="질문 작성"
             placeholderTextColor="white"
           />
         </View>
         <View>
-          <TouchableOpacity
-            style={styles.button}>
+          <TouchableOpacity style={styles.button} onPress={handleSubmit}>
             <Text>등록</Text>
           </TouchableOpacity>
         </View>
@@ -53,7 +55,6 @@ const QnaListItem = ({item}) => {
 };
 
 const styles = StyleSheet.create({
-
   input: {
     margin: 15,
     height: 40,
