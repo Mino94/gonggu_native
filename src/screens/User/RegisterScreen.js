@@ -97,27 +97,29 @@ const RegisterScreen =({ navigation })=>{
 		return;
 	}
 
-	if(user.userId==""||user.password==""||isZoneCode==""||isAddress==""||isAddress1==""|| user.tel==""||value==""||user.bankaccount=="")
+	if((user.userId==""||user.password==""||isZoneCode==""||isAddress==""||isAddress1==""|| user.tel==""||value==""||user.bankaccount==""))
+
     {
       alert("정보를 기입해주세요");
     }
-    else{
-    dispatch(
-      create({
-        userId: user.userId,
-        password: user.password,
-        name: user.name,
-        postcode: isZoneCode,//isZoneCode,
-        address1: isAddress,//isAddress,
-        address2: user.address2,
-        address3: isAddress1,
-        tel: user.tel,
-        bank: value,
-        bankaccount: user.bankaccount,
-      }),
-    );
-	alert("회원가입됐습니다");
+    else if(isPwSame){
+		dispatch(
+			create({
+				userId: user.userId,
+				password: user.password,
+				name: user.name,
+				postcode: isZoneCode,//isZoneCode,
+				address1: isAddress,//isAddress,
+				address2: user.address2,
+				address3: isAddress1,
+				tel: user.tel,
+				bank: value,
+				bankaccount: user.bankaccount,
+			}),
+    	);
+		alert("회원가입됐습니다");
 	}
+	else{alert("비밀번호가 일치하지 않습니다")}
   };
 
   const postCodeStyle = {

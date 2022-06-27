@@ -6,6 +6,8 @@ import RenderHTML from "react-native-render-html";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteData, init, select } from "../../store/board/board";
+import { boardSelect } from "../../store/board/mainboard";
+import { mypageSelect } from "../../store/mypage/mypage";
 import { create, joinState, remove } from "../../store/participation/participation";
 import { oneButtonAlert } from "./Alert";
 
@@ -50,14 +52,24 @@ const Detail = ( {navigation, route} ) => {
 		dispatch(select(boardId));
 	}, [joinStatus]);
 
-	const onPressJoinHandle = () => {
-		dispatch(create(boardId));
-		dispatch(joinState(boardId));
+	function sleep(ms) {
+		return new Promise(resolve => setTimeout(resolve, ms));
 	}
 
-	const onPressCancelHandle = () => {
+	const onPressJoinHandle = async () => {
+		dispatch(create(boardId));
+		dispatch(joinState(boardId));
+		await sleep(100);
+		dispatch(mypageSelect());
+		dispatch(boardSelect({ title: "" }));
+	}
+
+	const onPressCancelHandle = async () => {
 		dispatch(remove(boardId));
 		dispatch(joinState(boardId));
+		await sleep(100);
+		dispatch(mypageSelect());
+		dispatch(boardSelect({ title: "" }));
 	}
 
 	const onPressShowList = () => {

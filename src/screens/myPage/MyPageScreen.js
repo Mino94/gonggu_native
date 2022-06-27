@@ -10,14 +10,6 @@ const MyPageScreen = ({ navigation }) => {
     //console.log("mypage >>> " + JSON.stringify(mypage));
 
     useEffect(() => {
-        async function get() { 
-            try {
-                await AsyncStorage.setItem('token', "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZXhwIjoxNjU2MjYwNDExfQ.G_NZAZiU0Gh4qrlhyD2V2q8rg6N5aawhYr_dlNnlBZk")
-            } catch (error) {
-                console.log("error >>> " + error)
-            }
-        }
-        get();
         dispatch(mypageSelect())
     }, [])
 
@@ -32,10 +24,10 @@ const MyPageScreen = ({ navigation }) => {
     )
 }
 
-const MyPageButton = ({title, id, data, navigation}) => { 
-    
+const MyPageButton = ({title, id, data, navigation}) => {
+
     const linkto = id == 1 ? "MyJoin" : "MyPost";
-  
+
     return (
         <TouchableOpacity style={styles.btnContainer} onPress={() => navigation.push(linkto, {title:title, data:data}) } >
             <Text style={styles.buttonText}>{title}</Text>

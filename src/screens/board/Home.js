@@ -21,20 +21,8 @@ const Home = ({ navigation }) => {
 		dispatch(boardSelect({ title: "" }));
 	}, []);
 
-	useEffect(() => {
-		console.log("???????")
-	}, [dispatch]);
-
 	const onPressMoveWriteHandler = () => {
 		navigation.navigate("Write");
-	}
-
-	const onEndReached = () => {
-		if(mainboard.loading) {
-			return;
-		} else {
-			dispatch(boardSelect({ title: "" }));
-		}
 	}
 
 	return (

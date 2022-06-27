@@ -1,3 +1,4 @@
+import AsyncStorage from "@react-native-community/async-storage";
 import React, { useEffect } from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native"
 import { useDispatch, useSelector } from "react-redux";
@@ -7,26 +8,14 @@ const MyInfoScreen = ({ navigation }) => {
 
     //토큰 지정
     useEffect(() => {
-        async function get() {
-            try {
-                await AsyncStorage.setItem('token', "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZXhwIjoxNjU2MjYwNDExfQ.G_NZAZiU0Gh4qrlhyD2V2q8rg6N5aawhYr_dlNnlBZk")
-            } catch (error) {
-                console.log("error >>> " + error)
-            }
-        }
-        get();
         dispatch(mypageSelect())
     }, [])
+
     const mypage = useSelector((state) => state.mypage);
     const dispatch = useDispatch();
 
-    console.log("info에서 mypage 불러오기 >>>> ", mypage)
+    // console.log("info에서 mypage 불러오기 >>>> ", mypage)
     const data = mypage.data
-
-
-    // useEffect(() => {
-    //     dispatch(mypageSelect())
-    // }, [data.update])
 
     return (
         <View style={styles.container}>

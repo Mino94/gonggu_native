@@ -4,13 +4,13 @@ import { useDispatch, useSelector } from "react-redux";
 import AsyncStorage from "@react-native-community/async-storage";
 import { mypageSelect } from "../../store/mypage/mypage";
 
-const MyPageDetailScreen = ({route}) => {
+const MyPageDetailScreen = ({navigation, route}) => {
     //console.log("data >>>" + JSON.stringify(route.params.data))
     return (
         <View style={styles.container}>
             <Text style={styles.title}>{route.params.title}</Text>
             <View style={styles.postBlock}>
-            
+
                 <FlatList ListHeaderComponent={
                     <View style={styles.listTitleBlock}>
                         <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
@@ -21,10 +21,10 @@ const MyPageDetailScreen = ({route}) => {
                     </View>
                 }
                     data={route.params.data}
-                    renderItem={renderItem}
-                    keyExtractor={(item) => item.id} 
-                     />
-               
+                    renderItem={({item, index}) => <RenderItem index={index} item={item} navigation={navigation}/>}
+                    keyExtractor={(item) => item.id}
+                    />
+
             </View>
 		</View>
     )
@@ -33,7 +33,7 @@ const MyPageDetailScreen = ({route}) => {
 export default MyPageDetailScreen;
 
 
-const renderItem = ( {item,index} ) => {
+const RenderItem = ( {item, navigation, index} ) => {
     //console.log("item >>>" + JSON.stringify(item));
     const makeZeroNumber = (number) => {
         if (Number(number) < 10) {
@@ -41,7 +41,7 @@ const renderItem = ( {item,index} ) => {
         }
         return number;
     };
-    
+
     const compareDate = (endDate, cCount, mCount) => {
         let now = new Date();
         let ingState = false;
@@ -58,9 +58,13 @@ const renderItem = ( {item,index} ) => {
         return ingState;
     };
 
+	const onPressMoveToDetail = () => {
+		navigation.navigate("Detail", {id: item.id})
+	}
+
     return (
         <View style={styles.listBlock}>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={onPressMoveToDetail}>
                 <View style={{flexDirection:"row", justifyContent:"space-between"}}>
                     <View>
                         <Text style={{fontWeight:"bold"}}>{index+1}</Text>
@@ -79,7 +83,7 @@ const renderItem = ( {item,index} ) => {
             </TouchableOpacity>
         </View>
     )
-    
+
 
 }
 
