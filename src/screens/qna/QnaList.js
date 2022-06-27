@@ -15,14 +15,14 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {answerCreate, qnaCreate, qnaSelect} from '../../store/qna/qna';
+import {answerDelete, qnaCreate, qnaSelect} from '../../store/qna/qna';
 import {useIsFocused} from '@react-navigation/native';
 
 const QnaList = () => {
   const qna = useSelector(state => state.qna);
   const [load, setLoad] = useState('');
-  const [visible, setVisible] = useState(true);
   const [selectedId, setSelectedId] = useState(null);
+  const [visible, setVisible] = useState(true);
 
   const [question, setQuestion] = useState({
     boardId: 1,
@@ -47,25 +47,11 @@ const QnaList = () => {
   const onChangeHandler = async (key, value) => {
     await setQuestion({...question, [key]: value});
   };
-
-  // answer
-  const [answer, setAnswer] = useState({
-    id: '3',
-    answer: '',
-  });
-
-  const onChangeAnswerHandler = async (key, value) => {
-    await setAnswer({...answer, [key]: value});
-    console.log(answer);
+  const answerDeleteSubmit = id => {
+    dispatch(answerDelete({id: id}));
+    alert('삭제 되었습니다.');
+    setLoad(id);
   };
-
-  const handleAnswerSubmit = e => {
-    dispatch(answerCreate(answer));
-    Keyboard.dismiss();
-    alert('답글 작성이 완료되었습니다.');
-    setLoad(answer);
-  };
-
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
@@ -86,36 +72,28 @@ const QnaList = () => {
                 </View>
               </View>
               {item.id === selectedId ? (
-                item.answer === null ? (
-                  <View style={styles.inputRow2}>
-                    <View>
-                      <TextInput
-                        style={styles.input2}
-                        onChangeText={value =>
-                          onChangeAnswerHandler('answer', value)
-                        }
-                        placeholder="질문 작성"
-                        placeholderTextColor="#8a9a7f"
-                      />
-                    </View>
-                    <View>
+                item.answer !== null ? (
+                  <>
+                    <View style={styles.answerRow}>
+                      <View>
+                        <Text style={[styles.answer]}>{item.answer}</Text>
+                      </View>
                       <TouchableOpacity
-                        style={styles.button}
-                        onPress={handleAnswerSubmit}>
-                        <Text>등록</Text>
+                        onPress={() => answerDeleteSubmit(item.id)}
+                        style={styles.button}>
+                        <Text>삭제</Text>
                       </TouchableOpacity>
                     </View>
-                  </View>
+                  </>
                 ) : (
                   <View>
-                    <QnaListItem item={item} />
+                    <QnaListItem item={item} setLoad={setLoad} />
                   </View>
                 )
               ) : null}
             </>
           )}
           keyExtractor={item => item.id}
-          extraData={selectedId}
         />
       </ScrollView>
       <View style={styles.inputRow}>
@@ -123,13 +101,14 @@ const QnaList = () => {
           <TextInput
             style={styles.input}
             onChangeText={value => onChangeHandler('question', value)}
-            placeholder="질문 작성"
-            placeholderTextColor="#8a9a7f"
+            placeholderTextColor="white"
           />
+        </View>
+        <View>
           <TouchableOpacity
             onPress={handleQnaCreateSubmit}
-            style={styles.button2}>
-            <Text style={{color: '#F7F4E3', paddingLeft: 130}}>등록</Text>
+            style={styles.button}>
+            <Text>등록</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -145,91 +124,58 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 10,
   },
-  //input은 하단 질문 답변 창임
+
+  answerRow: {
+    margin: 10,
+    backgroundColor: '#f7d794',
+    color: 'black',
+    padding: 15,
+    fontSize: 15,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
   input: {
-    paddingLeft: 20,
     margin: 15,
     height: 40,
-    width: 300,
-    backgroundColor: 'white',
-    color: '#8a9a7f',
-    borderRadius: 10,
-    flexDirection: 'row',
-    alignItems: 'center',
+    width: 250,
+    borderColor: '#d6d9c6',
+    borderWidth: 1,
+    borderRadius: 20,
+    color: 'white',
   },
   inputRow: {
-    borderTopWidth: 1,
-    borderTopColor: '#8a9a7f',
-    backgroundColor: '#D2E1C8',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-around',
-  },
-  //input2는 위에 질문 바로 밑에임
-  input2: {
-    marginBottom: 15,
-    marginLeft: 5,
-    marginTop: 15,
-    height: 40,
-    width: 200,
-    backgroundColor: 'white',
-    color: '#8a9a7f',
-    borderRadius: 10,
+    backgroundColor: '#34532d',
     flexDirection: 'row',
     alignItems: 'center',
   },
-  inputRow2: {
-    height: 60,
-    width: 340,
-    margin: 10,
-    borderWidth: 2,
-    borderColor: '#b1b9ac',
-    backgroundColor: 'white',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-around',
-  },
+
   row: {
     margin: 10,
     backgroundColor: '#D2E1C8',
     color: '#0D4212',
     padding: 15,
     fontSize: 15,
-
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
   },
+
   item: {
-    backgroundColor: '#D2E1C8',
+    backgroundColor: '#8a9a7f',
     color: '#0D4212',
     padding: 15,
     fontSize: 15,
     marginVertical: 8,
     marginHorizontal: 16,
     margin: 15,
-    borderRadius: 20,
   },
-  button: {
-    width: 60,
-    height: 40,
-    paddingLeft: 18,
-    padding: 10,
-    borderRadius: 25,
 
-    backgroundColor: '#F7F4E3',
-  },
-  button2: {
-    backgroundColor: '#8a9a7f',
+  button: {
     paddingHorizontal: 8,
     paddingVertical: 6,
-    borderRadius: 30,
-    alignItems: 'center',
-    width: 300,
-    color: '#F7F4E3',
-    flexDirection: 'row',
-    marginBottom: 10,
-    marginLeft: 15,
+    borderRadius: 10,
+    backgroundColor: 'beige',
   },
 });
 
