@@ -84,6 +84,9 @@ const Detail = ( {navigation, route} ) => {
 		dispatch(deleteData(boardId));
 	}
 
+	const onPressToMoveQna = () => {
+		navigation.navigate("Qna", { id: boardId });
+	}
 
 	return (
 		<View style={{flex: 1}}>
@@ -134,7 +137,7 @@ const Detail = ( {navigation, route} ) => {
 				</View>
 			</ScrollView>
 			<View style={styles.bottomButton}>
-				<TouchableOpacity style={styles.button}>
+				<TouchableOpacity style={styles.button} onPress={onPressToMoveQna}>
 					<Text style={{color: "#1E4119", fontSize: 18}}>댓글보기</Text>
 				</TouchableOpacity>
 				{board.data.userId == userId ?

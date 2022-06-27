@@ -23,6 +23,8 @@ import Detail from '../board/Detail';
 import JoinList from '../board/JoinList';
 import LoginScreen from '../User/LoginScreen';
 import RegisterScreen from '../User/RegisterScreen';
+import QnaList from '../qna/QnaList';
+
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -56,7 +58,7 @@ const FullNavigation = () => {
 					name="MyJoin"
 				>
 					{props => <MyPageDetailScreen {...props} props={{ "title": "공구 참여 현황" }}/>}
- 				</Stack.Screen>
+				</Stack.Screen>
 				<Stack.Screen name="MyPost">
 						{props => <MyPageDetailScreen {...props} props={{ "title": "나의 공구 모집" }}/>}
 				</Stack.Screen>
@@ -79,6 +81,10 @@ const FullNavigation = () => {
 				<Stack.Screen
 					name="JoinList"
 					component={JoinList}
+				/>
+				<Stack.Screen
+					name="Qna"
+					component={QnaList}
 				/>
 			</Stack.Navigator>
 		</NavigationContainer>
