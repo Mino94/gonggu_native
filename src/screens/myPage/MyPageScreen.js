@@ -7,14 +7,14 @@ import AsyncStorage from "@react-native-community/async-storage";
 const MyPageScreen = ({ navigation }) => {
     const mypage = useSelector((state) => state.mypage);
     const dispatch = useDispatch();
-    //console.log("mypage >>> " + JSON.stringify(mypage));
+    console.log("mypage >>> " + JSON.stringify(mypage));
 
     useEffect(() => {
         async function get() { 
             try {
                 await AsyncStorage.setItem('token', "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZXhwIjoxNjU2MjYwNDExfQ.G_NZAZiU0Gh4qrlhyD2V2q8rg6N5aawhYr_dlNnlBZk")
             } catch (error) {
-                console.log("error >>> " + error)
+                console.log("error >>> " + error) 
             }
         }
         get();

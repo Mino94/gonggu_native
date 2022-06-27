@@ -1,11 +1,9 @@
 import { FlatList, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import React, {useEffect, useState} from "react";
-import { useDispatch, useSelector } from "react-redux";
-import AsyncStorage from "@react-native-community/async-storage";
-import { mypageSelect } from "../../store/mypage/mypage";
+import React from "react";
+
 
 const MyPageDetailScreen = ({route}) => {
-    //console.log("data >>>" + JSON.stringify(route.params.data))
+
     return (
         <View style={styles.container}>
             <Text style={styles.title}>{route.params.title}</Text>

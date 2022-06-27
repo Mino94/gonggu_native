@@ -14,7 +14,7 @@ export const init = () => ({ type: INIT });
 
 function signUpApi(params) {
   return axios.post(
-    "http://192.168.219.106:8080/user/join",
+    "http://192.168.0.60:8080/user/join",
 
     params // {params : {id: "aaa", pw: "1234"}}
   );
@@ -50,7 +50,7 @@ function* signUpUser(action) {
 
 function loginApi(params) {
   return axios.post(
-    "http://192.168.219.106:8080/user/login",
+    "http://192.168.0.60:8080/user/login",
     params //  {id: "aaa", pw: "1234"}
   );
 }
@@ -192,13 +192,7 @@ const login = (state = initialLogin, action) =>
 	case ID_CHECK_SUCCESS:
 		draft.isCheckedId=true;
 		draft.isCheckingId=false;
-		if (action.data==true)
-		{
-			alert("사용 가능한 아이디입니다");
-		}
-		else{
-			alert("중복된 아이디입니다");
-		}
+		
 		break;
 
       default:

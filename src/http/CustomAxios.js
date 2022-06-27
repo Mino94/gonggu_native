@@ -1,7 +1,7 @@
 import axios from "axios";
 import AsyncStorage from "@react-native-community/async-storage";
 
-axios.defaults.baseURL = 'http://192.168.219.106:8080';
+axios.defaults.baseURL = 'http://192.168.0.60:8080';
 
 export const storeToken = async (token, id) => {
 	try {
@@ -57,3 +57,12 @@ export const CustomFileAxios = async (url, method, data) => {
 	return response.data;
 }
 
+export const removeToken = async () => {
+	try {
+		await AsyncStorage.removeItem('token');
+		await AsyncStorage.removeItem( 'id' );
+        
+	} catch(err) {
+		console.log(err);
+	}
+}
