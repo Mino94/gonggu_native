@@ -12,18 +12,17 @@ const LoginScreen =({ navigation })=>{
     const [user, setUser] = useState({
         userId: "",
         password: "",
-      });
-      const onChangeTextHandler = (name, value) => {
-        setUser({
-          ...user,
-          [name]: value,
-        });
+	});
 
-      };
+	const onChangeTextHandler = (name, value) => {
+		setUser({
+			...user,
+			[name]: value,
+		});
+	};
 
       useEffect(() => {
 
-        console.log("loginRedux>>>>" + JSON.stringify(loginRedux))
         if (loginRedux.isLoggedIn) {
             // AsyncStorage.setItem("id", loginRedux.data.id + "");
             // AsyncStorage.setItem("token", loginRedux.data.token);

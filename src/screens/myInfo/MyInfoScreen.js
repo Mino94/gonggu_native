@@ -42,7 +42,7 @@ const MyInfoButton = ({ title, data, navigation }) => {
     const goLogout=()=>{
         removeToken();
         dispatch(init());
-        navigation.reset({routes: [{name: "Login"}]});
+        navigation.navigate("Login");
 
 
     }

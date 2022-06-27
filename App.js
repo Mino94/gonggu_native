@@ -1,9 +1,9 @@
 import React, { useCallback, useState } from 'react';
 import { Provider } from "react-redux";
 import store from './src/store/store';
-import { View, Text, Image, ScrollView, TextInput, SafeAreaView, StyleSheet, Button, AsyncStorage, Alert } from 'react-native';
-import FullNavigation from './src/screens/navigation/FullNavigation';
+import { View, Text, Image, ScrollView, TextInput, SafeAreaView, StyleSheet, Button, AsyncStorage, Alert, KeyboardAvoidingView, Platform } from 'react-native';
 import messaging from '@react-native-firebase/messaging';
+import HomeNavigation from './src/screens/navigation/FullNavigation';
 
 const App = () => {
 
@@ -19,7 +19,7 @@ const App = () => {
 		<Provider store={store}>
 			<SafeAreaView style={styles.container}>
 				<View style={styles.container}>
-					<FullNavigation/>
+					<HomeNavigation/>
 				</View>
 			</SafeAreaView>
 		</Provider>
@@ -32,11 +32,3 @@ const styles = StyleSheet.create({
 });
 
 export default App;
-// const styles = StyleSheet.create({
-// 	container: {
-// 	  flex: 1,
-// 	  backgroundColor: "#8a9a7f",
-// 	  alignItems: "center",
-// 	  justifyContent: "center",
-// 	},
-//   });

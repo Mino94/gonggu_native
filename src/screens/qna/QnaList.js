@@ -17,14 +17,12 @@ import {
 } from 'react-native';
 import {answerDelete, qnaCreate, qnaSelect} from '../../store/qna/qna';
 import {useIsFocused} from '@react-navigation/native';
-import { AsyncStorage } from '@react-native-community/async-storage';
+import { getId } from '../../http/CustomAxios';
 
-const QnaList = ({ navigation, route }) => {
+const QnaList = ({ route }) => {
   const qna = useSelector(state => state.qna);
-  // const board = useSelector(state => state.board);
-  // const nowId = AsyncStorage.getItem('id');
 
-  const board = route.params.data; // 수정할 때만 들어옴
+  const board = route.params.data;
 
   const [load, setLoad] = useState('');
   const [selectedId, setSelectedId] = useState(null);
@@ -35,18 +33,21 @@ const QnaList = ({ navigation, route }) => {
     questionId: board.data.userId,
     question: '',
   });
+  const boardUserId = board.data.userId;
+  console.log("qna : ", qna);
 
   async function getUserId() {
-    AsyncStorage.getItem("id").then((value) => {
-      setUserId(value);
-    })
+	getId().then((value) => {
+		setUserId(value);
+		console.log(userId)
+	})
   }
 
   const dispatch = useDispatch();
   const isFocused = useIsFocused();
 
   useEffect(() => {
-    
+
     dispatch(qnaSelect());
   }, [load]);
 
@@ -65,6 +66,8 @@ const QnaList = ({ navigation, route }) => {
     alert('삭제 되었습니다.');
     setLoad(id);
   };
+
+  getUserId();
   return (
     <View style={styles.container}>
         <FlatList
@@ -90,7 +93,7 @@ const QnaList = ({ navigation, route }) => {
                       <View>
                         <Text style={[styles.answer]}>{item.answer}</Text>
                       </View>
-                      {board.data.id === userId ? (
+                      {item.userId === boardUserId ? (
                       <TouchableOpacity
                         onPress={() => answerDeleteSubmit(item.id)}
                         style={styles.button}>
@@ -101,7 +104,7 @@ const QnaList = ({ navigation, route }) => {
                   </>
                 ) : (
                   <View>
-                    {board.data.id === userId ? (
+                    {item.userId === boardUserId ? (
                     <QnaListItem item={item} setLoad={setLoad} />
                     ) : <Text style={[styles.answer]}>{item.answer}</Text>}
                   </View>

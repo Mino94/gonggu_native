@@ -76,12 +76,18 @@ const Detail = ( {navigation, route} ) => {
 		navigation.navigate('JoinList', { id: boardId })
 	}
 
-	const onPressUpdateHandle = () => {
+	const onPressUpdateHandle = async () => {
 		navigation.navigate('Write', { id: boardId })
+		await sleep(100);
+		dispatch(mypageSelect());
+		dispatch(boardSelect({ title: "" }));
 	}
 
-	const onPressDeleteHandle = () => {
+	const onPressDeleteHandle = async () => {
 		dispatch(deleteData(boardId));
+		await sleep(100);
+		dispatch(mypageSelect());
+		dispatch(boardSelect({ title: "" }));
 	}
 
 	const onPressToMoveQna = () => {

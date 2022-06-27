@@ -2,7 +2,7 @@
 // import { createNativeStackNavigator } from "@react-navigation/native-stack"
 // import { createBottomTabNavigator}  from '@react-navigation/bottom-tabs';
 import { NavigationContainer, useIsFocused, useNavigation } from '@react-navigation/native';
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
@@ -24,12 +24,28 @@ import JoinList from '../board/JoinList';
 import LoginScreen from '../User/LoginScreen';
 import RegisterScreen from '../User/RegisterScreen';
 import QnaList from '../qna/QnaList';
+import { getToken } from '../../http/CustomAxios';
 
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
-const FullNavigation = () => {
+
+const HomeNavigation = () => {
+
+	const [isLogin, setIsLogin] = useState(false);
+
+	getToken().then((rst) => {
+		console.log("rest : ", rst);
+		if(rst == null) {
+			setIsLogin(false);
+		}else {
+			setIsLogin(true);
+		}
+	}).catch((err) => {
+		console.log(err);
+	});
+	console.log("isLogin ? ", isLogin)
 	return (
 		<NavigationContainer>
 			{/* <Header /> */}
@@ -42,17 +58,28 @@ const FullNavigation = () => {
 				headerTintColor: "#F6F4E5",
 				headerTitleAlign:"center"
 			}}>
+				{isLogin ?
+					<Stack.Screen
+					name="home1"
+					component={BottomTabScreen}
+					/>
+				:
+					<Stack.Screen
+					name="Login1"
+					component={LoginScreen}
+					/>
+				}
 				<Stack.Screen
 					name="Login"
 					component={LoginScreen}
-				/>
-				<Stack.Screen
-					name="Join"
-					component={RegisterScreen}
-				/>
+					/>
 				<Stack.Screen
 					name="home"
 					component={BottomTabScreen}
+					/>
+				<Stack.Screen
+					name="Join"
+					component={RegisterScreen}
 				/>
 				<Stack.Screen
 					name="MyJoin"
@@ -92,7 +119,7 @@ const FullNavigation = () => {
 	)
 
 }
-export default FullNavigation
+
 
 function LogoTitle() {
 	const navigation = useNavigation();
@@ -121,152 +148,7 @@ const BottomTabScreen = () => {
 
 }
 
-
-
-
-// const NavigateBefore = (props) => {
-// 	// console.log(props)
-// 	const navigation = props.navigation;
-// 	const focus = useIsFocused();
-
-// 	useEffect(
-// 		() => {
-// 			console.log("focus ", focus)
-// 			console.log("navi", navigation?.canGoBack())
-// 			if(focus){
-// 				if (navigation?.canGoBack())
-// 					navigation.goBack()
-// 				// else navigation.navigate('Home')
-// 			}}, [focus])
-
-// 	return (
-// 		<Text>123</Text>
-// 	)
-// }
-
-// const StackNavigation = () => {
-// 	return(
-// 		<Stack.Navigator
-// 			initialRouteName="Home"
-// 			screenOptions={{ headerShown: false }}>
-// 			<Stack.Screen
-// 				name="Home"
-// 				component={Board}
-// 				options={{ headerShown: false }}
-// 			/>
-// 			<Stack.Screen
-// 				name="MyPage"
-// 				component={MyPageScreen}
-// 			/>
-// 			<Stack.Screen name="MyJoin">
-// 					{props => <MyPageDetailScreen {...props} props={{ "title": "공구 참여 현황" }}/>}
-// 			</Stack.Screen>
-// 			<Stack.Screen name="MyPost">
-// 					{props => <MyPageDetailScreen {...props} props={{ "title": "나의 공구 모집" }}/>}
-// 			</Stack.Screen>
-// 			<Stack.Screen
-// 				name="MyInfo"
-// 				component={MyInfo}
-// 			/>
-// 		</Stack.Navigator>
-// 	);
-// }
-
-// const MyPageStackNavigation = () => {
-// 	return(
-// 		<Stack.Navigator initialRouteName="MyPage" screenOptions={{headerShown:false}}>
-// 			<Stack.Screen
-// 				name="MyPage"
-// 				component={MyPageScreen}
-// 			/>
-// 			<Stack.Screen name="MyJoin">
-// 					{props => <MyPageDetailScreen {...props} props={{ "title": "공구 참여 현황" }}/>}
-// 			</Stack.Screen>
-// 			<Stack.Screen name="MyPost">
-// 					{props => <MyPageDetailScreen {...props} props={{ "title": "나의 공구 모집" }}/>}
-// 			</Stack.Screen>
-// 			<Stack.Screen
-// 				name="MyInfo"
-// 				component={MyInfo}
-// 			/>
-// 		</Stack.Navigator>
-// 	);
-// }
-
-// const MyInfoStackNavigation = () => {
-// 	return (
-// 		<Stack.Navigator initialRouteName="MyInfo" screenOptions={{headerShown:false}}>
-// 			<Stack.Screen
-// 				name="MyInfo"
-// 				component={MyInfoScreen}
-// 			/>
-// 			<Stack.Screen
-// 				name="MyInfoDetail"
-// 				component={MyInfoDetailScreen}
-// 			/>
-// 		</Stack.Navigator>
-// 	)
-// }
-
-// const FullNavigation = () => {
-// 	return (
-// 		<NavigationContainer>
-// 			<Header />
-// 			<Tab.Navigator initialRouteName="Board" screenOptions={{tabBarActiveTintColor: "#0D4212", tabBarShowLabel:false, tabBarStyle:{shadowOpacity:0.2}, headerShown:false}}>
-// 				<Tab.Screen name="Left" component={NavigateBefore} options={{ tabBarIcon: ({color, size}) => (<Icon name='navigate-before' color={color} size={size} />) }} />
-// 				<Tab.Screen name="Right" component={NavigateNext} options={{ tabBarIcon: ({color, size}) => (<Icon name="navigate-next" color={color} size={size} />) }} />
-// 				<Tab.Screen name="Board" component={StackNavigation} options={{ tabBarIcon: ({color, size}) => (<Icon name="home" color={color} size={size} />) }} />
-// 				<Tab.Screen name="Mypage" component={MyPageStackNavigation} options={{ tabBarIcon: ({color, size}) => (<Icon name="format-list-bulleted" color={color} size={size} />) }} />
-// 				<Tab.Screen name="Notification" component={Notification} options={{ tabBarIcon: ({color, size}) => (<Icon name="notifications" color={color} size={size} />)  }}/>
-// 				<Tab.Screen name="MyInfo" component={MyInfoStackNavigation}options={{ tabBarIcon: ({color, size}) => (<Icon name="mood" color={color} size={size} />)  }}/>
-// 			</Tab.Navigator>
-// 		</NavigationContainer>
-// 	);
-// }
-
-// export default FullNavigation
-
-// const Header = () => {
-// 	const { top } = useSafeAreaInsets();
-// 	const navigation = useNavigation();
-//     if (Platform.OS == 'android') { //android setting
-//         StatusBar.setBackgroundColor('#1E4119', true)
-//     }
-
-// 	return (
-// 		<>
-//         	<View style={[styles.statusBarPlaceholder, {height:top}]} />
-//         	<StatusBar barStyle="light-content" />
-// 			<View style={styles.block}>
-// 				<TouchableOpacity onPress={()=>navigation.navigate('Home')}>
-// 					<Image source={require('../../../assets/logo.png')} style={styles.logoImage} resizeMode="contain" />
-// 				</TouchableOpacity>
-// 				<TouchableOpacity onPress={() => navigation.navigate('MyInfo')}>
-// 					<Image source={require('../../../assets/person.png')} style={styles.topButton} resizeMode="contain" />
-// 				</TouchableOpacity>
-// 			</View>
-//         </>
-//     )
-// }
-
-// const NavigateBefore = () => {
-// 	const navigation = useNavigation();
-// 	if (navigation?.canGoBack()) {
-// 		navigation.goBack()
-// 		return true
-// 	}
-// 	return false
-// }
-
-// const NavigateNext = () => {
-// 	const navigation = useNavigation();
-// 	if (navigation?.canGoBack()) {
-// 		navigation.goBack()
-// 		return true
-// 	}
-// 	return false
-// }
-
+export default HomeNavigation;
 
 const styles = StyleSheet.create({
     statusBarPlaceholder: {
