@@ -3,9 +3,12 @@ import React, { useEffect } from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native"
 import { useDispatch, useSelector } from "react-redux";
 import { mypageSelect } from "../../store/mypage/mypage";
-
+import { AsyncStorage } from '@react-native-community/async-storage';
+import { removeToken } from "../../http/CustomAxios";
+import { getToken } from './../../http/CustomAxios';
+import { init } from "../../store/login/login";
 const MyInfoScreen = ({ navigation }) => {
-
+    
     //토큰 지정
     useEffect(() => {
         dispatch(mypageSelect())
@@ -27,7 +30,7 @@ const MyInfoScreen = ({ navigation }) => {
             <View style={styles.box2}>
                 {/* <MyInfoButton title="마이 페이지" navigation={navigation} /> */}
                 <MyInfoButton title="내 정보 수정" data={data} navigation={navigation} />
-                <MyInfoButton title="로그아웃" />
+                <MyInfoButton title="로그아웃" navigation={navigation}/>
             </View>
         </View>
     )
@@ -36,13 +39,35 @@ const MyInfoScreen = ({ navigation }) => {
 export default MyInfoScreen;
 
 const MyInfoButton = ({ title, data, navigation }) => {
-
-    return (
-        <TouchableOpacity style={styles.btnContainer} onPress={() => navigation.navigate('MyInfoDetail', { data: data })} >
+    const dispatch = useDispatch();
+    const goLogout=()=>{
+        removeToken();
+        dispatch(init());
+        navigation.reset({routes: [{name: "Login"}]});
+        
+       
+    }
+    if (title=="로그아웃")
+    {
+        return(
+        <TouchableOpacity style={styles.btnContainer} onPress={goLogout} >
             <Text style={styles.buttonText}>{title}</Text>
         </TouchableOpacity>
-
-    )
+       
+        )
+        
+        
+    }
+    else{
+        console.log(data);
+        return (
+            <TouchableOpacity style={styles.btnContainer} onPress={() => navigation.navigate('MyInfoDetail', { data: data })} >
+                <Text style={styles.buttonText}>{title}</Text>
+            </TouchableOpacity>
+    
+        )
+    }
+   
 }
 
 const styles = StyleSheet.create({

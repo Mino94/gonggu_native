@@ -7,7 +7,7 @@ import AsyncStorage from "@react-native-community/async-storage";
 const MyPageScreen = ({ navigation }) => {
     const mypage = useSelector((state) => state.mypage);
     const dispatch = useDispatch();
-    //console.log("mypage >>> " + JSON.stringify(mypage));
+    console.log("mypage >>> " + JSON.stringify(mypage));
 
     useEffect(() => {
         dispatch(mypageSelect())

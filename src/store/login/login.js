@@ -50,7 +50,11 @@ function* signUpUser(action) {
 
 function loginApi(params) {
   return axios.post(
+<<<<<<< HEAD
     "http://192.168.0.24:8080/user/login",
+=======
+    "http://192.168.0.60:8080/user/login",
+>>>>>>> 191aa089a960befa8ef4b081ab54c53a527b8131
     params //  {id: "aaa", pw: "1234"}
   );
 }
@@ -190,13 +194,7 @@ const login = (state = initialLogin, action) =>
 	case ID_CHECK_SUCCESS:
 		draft.isCheckedId=true;
 		draft.isCheckingId=false;
-		if (action.data==true)
-		{
-			alert("사용 가능한 아이디입니다");
-		}
-		else{
-			alert("중복된 아이디입니다");
-		}
+		
 		break;
 
       default:

@@ -57,3 +57,12 @@ export const CustomFileAxios = async (url, method, data) => {
 	return response.data;
 }
 
+export const removeToken = async () => {
+	try {
+		await AsyncStorage.removeItem('token');
+		await AsyncStorage.removeItem( 'id' );
+        
+	} catch(err) {
+		console.log(err);
+	}
+}
