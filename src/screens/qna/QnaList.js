@@ -20,6 +20,7 @@ import {useIsFocused} from '@react-navigation/native';
 
 const QnaList = () => {
   const qna = useSelector(state => state.qna);
+  console.log("qan : ", qna);
   const [load, setLoad] = useState('');
   const [selectedId, setSelectedId] = useState(null);
   const [visible, setVisible] = useState(true);
@@ -53,10 +54,9 @@ const QnaList = () => {
     setLoad(id);
   };
   return (
-    <SafeAreaView style={styles.container}>
-      <ScrollView>
+    <View style={styles.container}>
         <FlatList
-          data={qna.data}
+          data={qna?.data}
           renderItem={({item}) => (
             <>
               <View style={styles.row}>
@@ -95,7 +95,6 @@ const QnaList = () => {
           )}
           keyExtractor={item => item.id}
         />
-      </ScrollView>
       <View style={styles.inputRow}>
         <View>
           <TextInput
@@ -112,7 +111,7 @@ const QnaList = () => {
           </TouchableOpacity>
         </View>
       </View>
-    </SafeAreaView>
+    </View>
   );
 };
 

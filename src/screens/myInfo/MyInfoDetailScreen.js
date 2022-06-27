@@ -203,6 +203,7 @@ const MyInfoDetailScreen = (props) => {
                         setOpen={setOpen}
                         setValue={setValue}
                         setItems={setItems}
+						listMode={"SCROLLVIEW"}
                         />
                 </View>
                 <View style={[styles.listBlock, {marginTop:6}]}>

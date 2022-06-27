@@ -97,7 +97,7 @@ const RegisterScreen =({ navigation })=>{
 		return;
 	}
 
-	if((user.userId==""||user.password==""||isZoneCode==""||isAddress==""||isAddress1==""|| user.tel==""||value==""||user.bankaccount==""))
+	if((user.userId==""||user.password==""||isZoneCode==""||isAddress==""|| user.tel==""||value==""||user.bankaccount==""))
 
     {
       alert("정보를 기입해주세요");

@@ -53,6 +53,7 @@ function* deleteAnswer(action) {
 }
 
 function* insertQna(action) {
+	console.log("action : ", action);
   try {
     const result = yield call(insertQnaApi, action.params);
     yield put({type: QNA_CREATE_SUCCESS, data: result.data}); //put : 특성 액션을 디스패치

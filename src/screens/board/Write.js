@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import board, { create, init, updateData } from "../../store/board/board";
 import { oneButtonAlert } from "./Alert";
 import { boardSelect } from "../../store/board/mainboard";
+import { mypageSelect } from "../../store/mypage/mypage";
 
 const Write = ({ navigation, route }) => {
 
@@ -125,6 +126,7 @@ const Write = ({ navigation, route }) => {
 		}
 		if(storeBoard.success && !storeBoard.loading) {
 			dispatch(boardSelect({ title: "" }));
+			dispatch(mypageSelect());
 			Alert();
 		}
 	}, [storeBoard]);

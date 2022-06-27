@@ -3,12 +3,11 @@ import React, { useEffect } from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native"
 import { useDispatch, useSelector } from "react-redux";
 import { mypageSelect } from "../../store/mypage/mypage";
-import { AsyncStorage } from '@react-native-community/async-storage';
 import { removeToken } from "../../http/CustomAxios";
 import { getToken } from './../../http/CustomAxios';
 import { init } from "../../store/login/login";
 const MyInfoScreen = ({ navigation }) => {
-    
+
     //토큰 지정
     useEffect(() => {
         dispatch(mypageSelect())
@@ -44,8 +43,8 @@ const MyInfoButton = ({ title, data, navigation }) => {
         removeToken();
         dispatch(init());
         navigation.reset({routes: [{name: "Login"}]});
-        
-       
+
+
     }
     if (title=="로그아웃")
     {
@@ -53,10 +52,10 @@ const MyInfoButton = ({ title, data, navigation }) => {
         <TouchableOpacity style={styles.btnContainer} onPress={goLogout} >
             <Text style={styles.buttonText}>{title}</Text>
         </TouchableOpacity>
-       
+
         )
-        
-        
+
+
     }
     else{
         console.log(data);
@@ -64,10 +63,10 @@ const MyInfoButton = ({ title, data, navigation }) => {
             <TouchableOpacity style={styles.btnContainer} onPress={() => navigation.navigate('MyInfoDetail', { data: data })} >
                 <Text style={styles.buttonText}>{title}</Text>
             </TouchableOpacity>
-    
+
         )
     }
-   
+
 }
 
 const styles = StyleSheet.create({
