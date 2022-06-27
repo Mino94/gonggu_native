@@ -15,7 +15,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {qnaCreate, qnaSelect} from '../../store/qna/qna';
+import {answerDelete, qnaCreate, qnaSelect} from '../../store/qna/qna';
 import {useIsFocused} from '@react-navigation/native';
 
 const QnaList = () => {
@@ -47,7 +47,11 @@ const QnaList = () => {
   const onChangeHandler = async (key, value) => {
     await setQuestion({...question, [key]: value});
   };
-
+  const answerDeleteSubmit = item => {
+    dispatch(answerDelete({id: item.id}));
+    alert('삭제 되었습니다.');
+    setLoad(item);
+  };
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
@@ -69,9 +73,20 @@ const QnaList = () => {
               </View>
               {item.id === selectedId ? (
                 item.answer !== null ? (
-                  <View>
-                    <Text style={[styles.answer]}>{item.answer}</Text>
-                  </View>
+                  <>
+                    <View style={styles.row}>
+                      <View>
+                        <Text style={[styles.answer]}>{item.answer}</Text>
+                      </View>
+                      <View>
+                        <TouchableOpacity
+                          onPress={answerDeleteSubmit(item)}
+                          style={styles.button}>
+                          <Text>삭제</Text>
+                        </TouchableOpacity>
+                      </View>
+                    </View>
+                  </>
                 ) : (
                   <View>
                     <QnaListItem item={item} setLoad={setLoad} />
