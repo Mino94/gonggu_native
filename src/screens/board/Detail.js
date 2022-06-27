@@ -85,7 +85,7 @@ const Detail = ( {navigation, route} ) => {
 	}
 
 	const onPressToMoveQna = () => {
-		navigation.navigate("Qna", { id: boardId });
+		navigation.navigate("Qna", { data: board });
 	}
 
 	return (

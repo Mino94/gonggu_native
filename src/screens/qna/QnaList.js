@@ -17,24 +17,36 @@ import {
 } from 'react-native';
 import {answerDelete, qnaCreate, qnaSelect} from '../../store/qna/qna';
 import {useIsFocused} from '@react-navigation/native';
+import { AsyncStorage } from '@react-native-community/async-storage';
 
-const QnaList = () => {
+const QnaList = ({ navigation, route }) => {
   const qna = useSelector(state => state.qna);
-  console.log("qan : ", qna);
+  // const board = useSelector(state => state.board);
+  // const nowId = AsyncStorage.getItem('id');
+
+  const board = route.params.data; // 수정할 때만 들어옴
+
   const [load, setLoad] = useState('');
   const [selectedId, setSelectedId] = useState(null);
   const [visible, setVisible] = useState(true);
-
+	const [userId, setUserId] = useState();
   const [question, setQuestion] = useState({
-    boardId: 1,
-    questionId: 1,
+    boardId: board.data.id,
+    questionId: board.data.userId,
     question: '',
   });
+
+  async function getUserId() {
+    AsyncStorage.getItem("id").then((value) => {
+      setUserId(value);
+    })
+  }
 
   const dispatch = useDispatch();
   const isFocused = useIsFocused();
 
   useEffect(() => {
+    
     dispatch(qnaSelect());
   }, [load]);
 
@@ -78,16 +90,20 @@ const QnaList = () => {
                       <View>
                         <Text style={[styles.answer]}>{item.answer}</Text>
                       </View>
+                      {board.data.id === userId ? (
                       <TouchableOpacity
                         onPress={() => answerDeleteSubmit(item.id)}
                         style={styles.button}>
                         <Text>삭제</Text>
                       </TouchableOpacity>
+                      ) : null}
                     </View>
                   </>
                 ) : (
                   <View>
+                    {board.data.id === userId ? (
                     <QnaListItem item={item} setLoad={setLoad} />
+                    ) : <Text style={[styles.answer]}>{item.answer}</Text>}
                   </View>
                 )
               ) : null}
