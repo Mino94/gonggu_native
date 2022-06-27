@@ -14,7 +14,7 @@ export const init = () => ({ type: INIT });
 
 function signUpApi(params) {
   return axios.post(
-    "http://192.168.219.106:8080/user/join",
+    "http://192.168.0.24:8080/user/join",
 
     params // {params : {id: "aaa", pw: "1234"}}
   );
@@ -50,7 +50,7 @@ function* signUpUser(action) {
 
 function loginApi(params) {
   return axios.post(
-    "http://192.168.219.106:8080/user/login",
+    "http://192.168.0.24:8080/user/login",
     params //  {id: "aaa", pw: "1234"}
   );
 }
@@ -127,8 +127,6 @@ const initialLogin = {
 //reducer
 const login = (state = initialLogin, action) =>
   produce(state, (draft) => {
-	console.log("action>>>>",action);
-
     switch (action.type) {
 	  case INIT:
 		draft.isLoggedIn = false;

@@ -1,7 +1,7 @@
 import axios from "axios";
 import AsyncStorage from "@react-native-community/async-storage";
 
-axios.defaults.baseURL = 'http://192.168.219.106:8080';
+axios.defaults.baseURL = 'http://192.168.0.24:8080';
 
 export const storeToken = async (token, id) => {
 	try {

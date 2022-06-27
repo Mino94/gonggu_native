@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native"
 import * as Progress from 'react-native-progress';
 import RenderHTML from "react-native-render-html";
-import Icon from "react-native-vector-icons/AntDesign";
+import Icon from "react-native-vector-icons/MaterialIcons";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteData, init, select } from "../../store/board/board";
 import { create, joinState, remove } from "../../store/participation/participation";
@@ -72,6 +72,7 @@ const Detail = ( {navigation, route} ) => {
 		dispatch(deleteData(boardId));
 	}
 
+
 	return (
 		<View style={{flex: 1}}>
 			<ScrollView>
@@ -88,7 +89,7 @@ const Detail = ( {navigation, route} ) => {
 				<View style={styles.info}>
 					{board.data.userId == userId ?
 					<View style={styles.iconButtonView}>
-						<TouchableOpacity style={styles.iconButton} onPress={onPressUpdateHandle}><Icon name="form" size={30}/></TouchableOpacity>
+						<TouchableOpacity style={styles.iconButton} onPress={onPressUpdateHandle}><Icon name="mode-edit" size={30}/></TouchableOpacity>
 						<TouchableOpacity style={styles.iconButton} onPress={onPressDeleteHandle}><Icon name="delete" size={30}/></TouchableOpacity>
 					</View>
 					: null}
@@ -129,14 +130,19 @@ const Detail = ( {navigation, route} ) => {
 					<Text style={{color: "#1E4119", fontSize: 18}}>리스트 보기</Text>
 				</TouchableOpacity>
 				:
-				joinStatus.data ?
-				<TouchableOpacity style={styles.button} onPress={onPressCancelHandle}>
-					<Text style={{color: "#1E4119", fontSize: 18}}>참여 취소</Text>
-				</TouchableOpacity>
-				:
-				<TouchableOpacity style={styles.button} onPress={onPressJoinHandle}>
-					<Text style={{color: "#1E4119", fontSize: 18}}>참여하기</Text>
-				</TouchableOpacity>
+					joinStatus.data ?
+					<TouchableOpacity style={styles.button} onPress={onPressCancelHandle}>
+						<Text style={{color: "#1E4119", fontSize: 18}}>참여 취소</Text>
+					</TouchableOpacity>
+					:
+						(dDay > 0) ?
+						<TouchableOpacity style={styles.buttonFinish} activeOpacity={1}>
+							<Text style={{color: "#1E4119", fontSize: 18}}>마감</Text>
+						</TouchableOpacity>
+						:
+						<TouchableOpacity style={styles.button} onPress={onPressJoinHandle}>
+							<Text style={{color: "#1E4119", fontSize: 18}}>참여하기</Text>
+						</TouchableOpacity>
 				}
 			</View>
 		</View>
@@ -212,6 +218,14 @@ const styles = StyleSheet.create({
 	},
 	iconButton: {
 		padding: 5
+	},
+	buttonFinish: {
+		flex: 1,
+		alignItems: 'center',
+		justifyContent: 'center',
+		borderRadius: 15,
+		backgroundColor: '#828282',
+		margin: 7
 	}
 })
 

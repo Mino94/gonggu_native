@@ -8,7 +8,7 @@ export const boardSelect = (params) => ({ type: BOARD_POST, params });
 
 //api
 function mainBoardApi(params) {
-  return axios.get("http://192.168.219.106:8080/board", { params });
+  return axios.get("http://192.168.0.24:8080/board", { params });
   //console.log("params : ", params);
   //return CustomAxios("/board", "get", { params });
 }
